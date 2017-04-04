@@ -1,6 +1,6 @@
 <?php
 /**
- * P2Widget.php
+ * P2WidgetBase.php
  *
  * @copyright Copyright &copy; Pedro Plowman, 2017
  * @author Pedro Plowman
@@ -8,7 +8,7 @@
  * @license MIT
  *
  * @package p2made/yii2-p2y2-base
- * @class \p2m\base\widgets\P2Widget
+ * @class \p2m\base\widgets\P2WidgetBase
  */
 
 namespace p2m\base\widgets;
@@ -18,13 +18,13 @@ use yii\bootstrap\Html;
 /**
  * Use this helper with...
  *
- * use p2m\widgets\base\P2Widget;
+ * use p2m\widgets\base\P2WidgetBase;
  * ...
- * echo P2Widget::method([$params]);
+ * echo P2WidgetBase::method([$params]);
  *
  * or
  *
- * echo \p2m\widgets\base\P2Widget::method([$params]);
+ * echo \p2m\widgets\base\P2WidgetBase::method([$params]);
  */
 
 /**
@@ -50,7 +50,7 @@ use yii\bootstrap\Html;
  * @var protected $_dataVar;
  * @var protected $_encOptions = '';
  */
-class P2Widget extends \yii\base\Widget
+class P2WidgetBase extends \yii\base\Widget
 {
 
 	/**

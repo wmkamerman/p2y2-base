@@ -24,7 +24,7 @@ namespace p2m\base\widgets;
  *
  * echo \p2m\widgets\_ExampleWidget::method([$params]);
  */
-class _ExampleWidget extends \p2m\base\widgets\P2Widget
+class _ExampleWidget extends \p2m\base\widgets\P2WidgetBase
 {
 
 	/**
