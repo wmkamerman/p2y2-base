@@ -7,18 +7,18 @@
  * @link https://github.com/p2made
  * @license MIT
  *
- * @package p2made/yii2-p2y2-things
+ * @package p2made/yii2-p2y2-base
  * @class \p2m\base\assets\P2AssetBase
  */
 
 /**
- * ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ #####
- * ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ #####
- * ##### ^ ##### ^ #####                                           ##### ^ ##### ^ #####
- * ##### ^ ##### ^ #####      DO NOT USE THIS CLASS DIRECTLY!      ##### ^ ##### ^ #####
- * ##### ^ ##### ^ #####                                           ##### ^ ##### ^ #####
- * ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ #####
- * ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ #####
+ * ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ #####
+ * ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ #####
+ * ##### ^ #####                                           ##### ^ #####
+ * ##### ^ #####      DO NOT USE THIS CLASS DIRECTLY!      ##### ^ #####
+ * ##### ^ #####                                           ##### ^ #####
+ * ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ #####
+ * ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ #####
  */
 
 namespace p2m\base\assets;
@@ -34,6 +34,12 @@ use p2m\base\helpers\Settings;
  */
 class P2AssetBase extends \yii\web\AssetBundle
 {
+	/*
+	 * @var string
+	 * protected $version;
+	 */
+	protected $version; // = '0.0.0'
+
 	/*
 	 * @var string
 	 * private $_p2mProjectId;
@@ -99,7 +105,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 			$this->publishOptions = $assetData['publishOptions'];
 		}
 
-		if(P2AssetBase::useStatic() && isset($assetData['static'])) {
+		if(self::useStatic() && isset($assetData['static'])) {
 			$this->configureStaticAsset($assetData['static']);
 		} elseif(isset($assetData['published'])) {
 			$this->configurePublishedAsset($assetData['published']);

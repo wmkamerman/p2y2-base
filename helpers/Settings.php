@@ -7,7 +7,7 @@
  * @link https://github.com/p2made
  * @license MIT
  *
- * @package p2made/yii2-p2y2-things
+ * @package p2made/yii2-p2y2-base
  * @class \p2m\base\helpers\Settings
  */
 
@@ -72,13 +72,13 @@ class Settings
 	 */
 	public static function params()
 	{
-		if(isset($_params)) {
-			return $_params;
+		if(isset(self::$_params)) {
+			return self::$_params;
 		}
 
-		$_params = Yii::$app->params;
+		self::$_params = Yii::$app->params;
 
-		return $_params;
+		return self::$_params;
 	}
 
 	/**
@@ -88,20 +88,11 @@ class Settings
 	 */
 	public static function p2mSettings()
 	{
-		if(isset($_p2mSettings)) {
-			return $_p2mSettings;
+		if(isset(self::$_p2mSettings)) {
+			return self::$_p2mSettings;
 		}
 
-		$settings = $this->params();
-
-		if(!isset($settings['p2m'])) {
-			$_p2mSettings = false;
-			return $_p2mSettings;
-		}
-
-		$_p2mSettings = $settings['p2m'];
-
-		return $_p2mSettings;
+		return self::getSettingsItem(self::params(), self::$_p2mSettings, 'p2m');
 	}
 
 	/*
@@ -117,25 +108,11 @@ class Settings
 	 */
 	public static function assetsSettings()
 	{
-		if(isset($_assetsSettings)) {
-			return $_assetsSettings;
+		if(isset(self::$_assetsSettings)) {
+			return self::$_assetsSettings;
 		}
 
-		$settings = $this->p2mSettings();
-
-		if($settings === false) {
-			$_assetsSettings = false;
-			return $_assetsSettings;
-		}
-
-		if(!isset($settings['assets'])) {
-			$_assetsSettings = false;
-			return $_assetsSettings;
-		}
-
-		$_assetsSettings = $settings['assets'];
-
-		return $_assetsSettings;
+		return self::getSettingsItem(self::p2mSettings(), self::$_assetsSettings, 'assets');
 	}
 
 	/**
@@ -145,25 +122,11 @@ class Settings
 	 */
 	public static function assetsUseStatic()
 	{
-		if(isset($_useStatic)) {
-			return $_useStatic;
+		if(isset(self::$_useStatic)) {
+			return self::$_useStatic;
 		}
 
-		$settings = $this->assetsSettings();
-
-		if($settings === false) {
-			$_useStatic = false;
-			return $_useStatic;
-		}
-
-		if(!isset($settings['useStatic'])) {
-			$_useStatic = false;
-			return $_useStatic;
-		}
-
-		$_useStatic = $settings['useStatic'];
-
-		return $_useStatic;
+		return self::getSettingsItem(self::assetsSettings(), self::$_useStatic, 'useStatic');
 	}
 
 	/**
@@ -173,25 +136,11 @@ class Settings
 	 */
 	public static function assetsStaticEnd()
 	{
-		if(isset($_staticEnd)) {
-			return $_staticEnd;
+		if(isset(self::$_staticEnd)) {
+			return self::$_staticEnd;
 		}
 
-		$settings = $this->assetsSettings();
-
-		if($settings === false) {
-			$_staticEnd = false;
-			return $_staticEnd;
-		}
-
-		if(!isset($settings['staticEnd'])) {
-			$_staticEnd = false;
-			return $_staticEnd;
-		}
-
-		$_staticEnd = $settings['staticEnd'];
-
-		return $_staticEnd;
+		return self::getSettingsItem(self::assetsSettings(), self::$_staticEnd, 'staticEnd');
 	}
 
 	/*
@@ -207,26 +156,29 @@ class Settings
 	 */
 	public static function usersSettings()
 	{
-		if(isset($_usersSettings)) {
-			return $_usersSettings;
+		if(isset(self::$_usersSettings)) {
+			return self::$_usersSettings;
 		}
 
-		$settings = $this->p2mSettings();
-
-		if($settings === false) {
-			$_usersSettings = false;
-			return $_usersSettings;
-		}
-
-		if(!isset($settings['users'])) {
-			$_usersSettings = false;
-			return $_usersSettings;
-		}
-
-		$_usersSettings = $settings['users'];
-
-		return $_usersSettings;
+		return self::getSettingsItem(self::p2mSettings(), self::$_usersSettings, 'users');
 	}
+
+	protected function getSettingsItem($source = [], &$target, $name = '')
+	{
+		if($source === false) {
+			$target = false;
+			return $target;
+		}
+
+		if(!isset($source[$name])) {
+			$target = false;
+			return $target;
+		}
+
+		$target = $source[$name];
+		return $target;
+	}
+
 
 	/*
 	public static function usersRequireEmail()
