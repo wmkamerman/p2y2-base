@@ -2,15 +2,16 @@
 /**
  * _ExampleAsset.php
  *
- * Yii2 asset for Xxxxxxxxx
- * http://example.com/
- *
  * @copyright Copyright &copy; Pedro Plowman, 2017
  * @author Pedro Plowman
  * @link https://github.com/p2made
- * @package p2made/yii2-p2y2-base
  * @license MIT
+ *
+ * @package p2made/yii2-p2y2-things
+ * @class \p2m\base\assets\_ExampleAsset
  */
+
+namespace p2m\base\assets; /* edit this if using elsewhere */
 
 /**
  * Load this asset with...
@@ -19,10 +20,7 @@
  * or specify as a dependency with...
  *     'p2m\assets\_ExampleAsset',
  */
-
-namespace p2m\assets; /* edit this if using elsewhere */
-
-class _ExampleAsset extends \p2m\assets\base\P2AssetBundle
+class _ExampleAsset extends P2AssetBase
 {
 	protected $version = '0.0.0';
 

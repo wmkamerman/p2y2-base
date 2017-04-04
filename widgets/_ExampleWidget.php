@@ -5,10 +5,13 @@
  * @copyright Copyright &copy; Pedro Plowman, 2017
  * @author Pedro Plowman * @license MIT
  * @link https://github.com/p2made
+ * @license MIT
+ *
  * @package p2made/yii2-p2y2-things
+ * @class \p2m\base\widgets\_ExampleWidget
  */
 
-namespace p2m\widgets;
+namespace p2m\base\widgets;
 
 /**
  * Use this helper with...
@@ -21,12 +24,7 @@ namespace p2m\widgets;
  *
  * echo \p2m\widgets\_ExampleWidget::method([$params]);
  */
-
-/**
- * Class _ExampleWidget
- * @package p2m\yii2-p2y2-things
- */
-class _ExampleWidget extends \p2m\widgets\base\P2Widget
+class _ExampleWidget extends \p2m\base\widgets\P2Widget
 {
 
 	/**

@@ -5,11 +5,13 @@
  * @copyright Copyright &copy; Pedro Plowman, 2017
  * @author Pedro Plowman
  * @link https://github.com/p2made
- * @package p2made/yii2-p2y2-base
  * @license MIT
+ *
+ * @package p2made/yii2-p2y2-things
+ * @class \p2m\base\helpers\_ExampleHelper
  */
 
-namespace p2m\helpers;
+namespace p2m\base\helpers;
 
 /**
  * Use this helper with...
@@ -22,12 +24,7 @@ namespace p2m\helpers;
  *
  * echo \p2m\helpers\_ExampleHelper::method([$params]);
  */
-
-/**
- * Class _ExampleHelper
- * @package p2m\yii2-p2y2-things
- */
-class _ExampleHelper extends \p2m\helpers\base\P2Helper
+class _ExampleHelper extends \p2m\base\helpers\P2Helper
 {
 
 

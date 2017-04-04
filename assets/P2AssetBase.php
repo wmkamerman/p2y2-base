@@ -5,8 +5,10 @@
  * @copyright Copyright &copy; Pedro Plowman, 2017
  * @author Pedro Plowman
  * @link https://github.com/p2made
- * @package p2made/yii2-p2y2-base
  * @license MIT
+ *
+ * @package p2made/yii2-p2y2-things
+ * @class \p2m\base\assets\P2AssetBase
  */
 
 /**
@@ -19,6 +21,10 @@
  * ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ #####
  */
 
+namespace p2m\base\assets;
+
+use p2m\base\helpers\Settings;
+
 /**
  * Load this asset with...
  * p2m\assets\base\P2AssetBase::register($this);
@@ -26,18 +32,31 @@
  * or specify as a dependency with...
  *     'p2m\assets\base\P2AssetBase',
  */
-
-namespace p2m\assets\base;
-
-use p2m\base\helpers\Settings;
-
 class P2AssetBase extends \yii\web\AssetBundle
 {
 	/*
 	 * @var string
+	 * private $_p2mProjectId;
+	 */
+	protected $_p2mProjectId = 'yii2-p2y2-base';
+
+	/*
+	 * @var string
 	 * private $_p2mPath;
 	 */
-	//private static $_p2mPath = '@vendor/p2made/yii2-p2y2-base/assets/lib';
+	private $_p2mPath;
+
+	/*
+	 * @var boolean
+	 * private $_useStatic = false;
+	 */
+	private static $_useStatic;
+
+	/*
+	 * @var array | false
+	 * private $_staticEnd = false;
+	 */
+	private static $_staticEnd;
 
 	/**
 	 * @var string
@@ -65,18 +84,6 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 * public $publishOptions = [];
 	 */
 
-	/*
-	 * @var boolean
-	 * private $_useStatic = false;
-	 */
-	private static $_useStatic;
-
-	/*
-	 * @var array | false
-	 * private $_staticEnd = false;
-	 */
-	private static $_staticEnd;
-
 	protected function configureAsset($assetData)
 	{
 		if(isset($assetData['cssOptions'])) {
@@ -92,7 +99,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 			$this->publishOptions = $assetData['publishOptions'];
 		}
 
-		if(P2AssetBundle::useStatic() && isset($assetData['static'])) {
+		if(P2AssetBase::useStatic() && isset($assetData['static'])) {
 			$this->configureStaticAsset($assetData['static']);
 		} elseif(isset($assetData['published'])) {
 			$this->configurePublishedAsset($assetData['published']);
@@ -133,8 +140,14 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 	// ===== utility functions ===== //
 
-	protected static function p2mPath()
+	protected function p2mPath()
 	{
+		if(isset($this->_p2mPath)) {
+			return $this->_p2mPath;
+		}
+
+		$this->_p2mPath = '@vendor/p2made/' . $this->_p2mProjectId . '/vendor';
+
 		return $this->_p2mPath;
 	}
 
@@ -157,13 +170,13 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 */
 	protected static function useStatic()
 	{
-		if(isset($_useStatic)) {
-			return $_useStatic;
+		if(isset(self::$_useStatic)) {
+			return self::$_useStatic;
 		}
 
-		$_useStatic = Settings::assetsUseStatic();
+		self::$_useStatic = Settings::assetsUseStatic();
 
-		return $_useStatic;
+		return self::$_useStatic;
 	}
 
 	/**

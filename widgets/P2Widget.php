@@ -5,11 +5,13 @@
  * @copyright Copyright &copy; Pedro Plowman, 2017
  * @author Pedro Plowman
  * @link https://github.com/p2made
- * @package p2made/yii2-p2y2-things
  * @license MIT
+ *
+ * @package p2made/yii2-p2y2-things
+ * @class \p2m\base\widgets\P2Widget
  */
 
-namespace p2m\widgets\base;
+namespace p2m\base\widgets;
 
 use yii\bootstrap\Html;
 
@@ -47,11 +49,6 @@ use yii\bootstrap\Html;
  * @var protected $_hashVar;
  * @var protected $_dataVar;
  * @var protected $_encOptions = '';
- */
-
-/**
- * Class P2Widget
- * @package p2m\yii2-p2y2-things
  */
 class P2Widget extends \yii\base\Widget
 {

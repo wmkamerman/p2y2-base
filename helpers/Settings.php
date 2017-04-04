@@ -5,23 +5,22 @@
  * @copyright Copyright &copy; Pedro Plowman, 2017
  * @author Pedro Plowman
  * @link https://github.com/p2made
- * @package p2made/yii2-p2y2-base
  * @license MIT
+ *
+ * @package p2made/yii2-p2y2-things
+ * @class \p2m\base\helpers\Settings
  */
 
-namespace p2m\helpers;
+namespace p2m\base\helpers;
 
 use Yii;
 
-/**
- * class p2m\base\helpers\Settings
- */
-class Settings extends \p2m\helpers\base\P2Helper
+class Settings
 {
 	/**
 	 * @var array Yii::$app->params
 	 */
-	private static $_params = Yii::$app->params;
+	private static $_params;
 
 	/**
 	 * @var array | false p2m settings
@@ -67,6 +66,22 @@ class Settings extends \p2m\helpers\base\P2Helper
 	*/
 
 	/**
+	 * Get params
+	 * @return array | false
+	 * @default false
+	 */
+	public static function params()
+	{
+		if(isset($_params)) {
+			return $_params;
+		}
+
+		$_params = Yii::$app->params;
+
+		return $_params;
+	}
+
+	/**
 	 * Get p2m settings
 	 * @return array | false
 	 * @default false
@@ -77,12 +92,14 @@ class Settings extends \p2m\helpers\base\P2Helper
 			return $_p2mSettings;
 		}
 
-		if(!isset($_params['p2m'])) {
+		$settings = $this->params();
+
+		if(!isset($settings['p2m'])) {
 			$_p2mSettings = false;
 			return $_p2mSettings;
 		}
 
-		$_p2mSettings = $_params['p2m'];
+		$_p2mSettings = $settings['p2m'];
 
 		return $_p2mSettings;
 	}

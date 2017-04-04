@@ -5,11 +5,13 @@
  * @copyright Copyright &copy; Pedro Plowman, 2017
  * @author Pedro Plowman
  * @link https://github.com/p2made
- * @package p2made/yii2-p2y2-things
  * @license MIT
+ *
+ * @package p2made/yii2-p2y2-things
+ * @class \p2m\base\components\_ExampleComponent
  */
 
-namespace p2m\components;
+namespace p2m\base\components;
 
 // use p2m\helpers\SomeHelper;
 // use p2m\widgets\SomeWidget;
@@ -35,11 +37,6 @@ use yii\bootstrap\Html;
  * or
  *
  * echo \p2m\components\_ExampleComponent::method([$params]);
- */
-
-/**
- * Class _ExampleComponent
- * @package p2m\yii2-p2y2-things
  */
 class _ExampleComponent extends \p2m\components\base\P2ComponentBase
 {
