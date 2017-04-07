@@ -50,7 +50,7 @@ use yii\bootstrap\Html;
  * @var protected $_dataVar;
  * @var protected $_encOptions = '';
  */
-class P2WidgetBase extends \yii\base\Widget
+class P2WidgetBase extends \yii\bootstrap\Widget
 {
 
 	/**
