@@ -23,7 +23,7 @@
 
 namespace p2m\base\assets;
 
-use p2m\base\helpers\Settings;
+use p2m\base\helpers\AssetsSettings;
 
 /**
  * Load this asset with...
@@ -180,7 +180,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 			return self::$_useStatic;
 		}
 
-		self::$_useStatic = Settings::assetsUseStatic();
+		self::$_useStatic = AssetsSettings::assetsUseStatic();
 
 		return self::$_useStatic;
 	}
@@ -196,7 +196,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 			return $_staticEnd;
 		}
 
-		$_staticEnd = Settings::assetsStaticEnd();
+		$_staticEnd = AssetsSettings::assetsStaticEnd();
 
 		return $_staticEnd;
 	}
