@@ -38,7 +38,7 @@ class P2Settings
 			return self::$_p2mSettings;
 		}
 
-		return self::getSettingsItem(Yii::$app->params, self::$_p2mSettings, 'p2m');
+		return self::getSettingsItem(self::$_p2mSettings, Yii::$app->params, 'p2m');
 	}
 
 	/**
