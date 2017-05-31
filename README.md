@@ -1,4 +1,4 @@
-P2Y2 Base v1.1.2
+P2Y2 Base v1.1.3
 =========
 
 A base bundle for other p2y2 bundles.

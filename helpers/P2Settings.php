@@ -65,7 +65,7 @@ class P2Settings
 	 * @return object | false
 	 * @default false
 	 */
-	protected function getSettingsItem(&$target, $source, $name = '', $default = false)
+	protected static function getSettingsItem(&$target, $source, $name = '', $default = false)
 	{
 		/**
 		 * if $target is already set,
