@@ -36,15 +36,27 @@ class P2AssetBase extends \yii\web\AssetBundle
 {
 	/*
 	 * @var string
+	 * private $_p2mProjectId;
+	 */
+	protected $_p2mProjectId = 'yii2-p2y2-base';
+
+	/*
+	 * @var string
+	 * protected $assetName;
+	 */
+	protected $assetName;
+
+	/*
+	 * @var string
 	 * protected $version;
 	 */
 	protected $version; // = '0.0.0'
 
 	/*
-	 * @var string
-	 * private $_p2mProjectId;
+	 * @var array
+	 * protected $resourceData;
 	 */
-	protected $_p2mProjectId = 'yii2-p2y2-base';
+	protected $resourceData = [];
 
 	/*
 	 * @var string
@@ -60,9 +72,9 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 	/*
 	 * @var array | false
-	 * private $_staticEnd = false;
+	 * private $_assetsEnd = false;
 	 */
-	private static $_staticEnd;
+	private static $_assetsEnd;
 
 	/**
 	 * @var string
@@ -89,6 +101,32 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 * @var array
 	 * public $publishOptions = [];
 	 */
+
+/*
+		'jqueryAsset' => array(
+			'name' => 'jquery',
+			'version' => '3.3.1',
+			'published' => [
+				'sourcePath' => '@p2m@/jquery',
+				'js' => [
+					'jquery-##-version-##.min.js',
+				],
+			],
+			'static' => [
+				'baseUrl' => 'https://code.jquery.com',
+				'js' => [
+					'jquery-##-version-##.min.js',
+				],
+				'jsIntegrity' => 'sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT',
+				'crossorigin' => 'anonymous',
+			],
+		),
+
+ */
+
+	protected function configureAssetFromData($assetData)
+	{
+	}
 
 	protected function configureAsset($assetData)
 	{
@@ -186,18 +224,18 @@ class P2AssetBase extends \yii\web\AssetBundle
 	}
 
 	/**
-	 * Get staticEnd setting - static application end
+	 * Get assetsEnd setting - static application end
 	 * @return array | false
 	 * @default false
 	 */
-	protected static function staticEnd()
+	protected static function assetsEnd()
 	{
-		if(isset($_staticEnd)) {
-			return $_staticEnd;
+		if(isset($_assetsEnd)) {
+			return $_assetsEnd;
 		}
 
-		$_staticEnd = AssetsSettings::assetsStaticEnd();
+		$_assetsEnd = AssetsSettings::assetsassetsEnd();
 
-		return $_staticEnd;
+		return $_assetsEnd;
 	}
 }

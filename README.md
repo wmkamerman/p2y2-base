@@ -1,4 +1,4 @@
-P2Y2 Base v1.1.3
+P2Y2 Base v1.1.4
 =========
 
 A base bundle for other p2y2 bundles.
@@ -10,19 +10,19 @@ The preferred way to install P2Y2 Timezones is through [composer](http://getcomp
 Depending on your composer installation, run *one* of the following commands:
 
 ```
-	composer require p2made/yii2-p2y2-base "^0.0"
+    composer require p2made/yii2-p2y2-base "^1.1"
 ```
 
 or
 
 ```
-	php composer.phar require p2made/yii2-p2y2-base "^0.0"
+    php composer.phar require p2made/yii2-p2y2-base "^1.1"
 ```
 
 Alternatively add:
 
 ```
-	"p2made/yii2-p2y2-base": "^0.0"
+    "p2made/yii2-p2y2-base": "^0.0"
 ```
 
 to the requires section of your `composer.json` file & P2Y2 Timezones will be installed next time you run `composer update`.
