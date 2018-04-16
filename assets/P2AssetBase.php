@@ -42,15 +42,21 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 	/*
 	 * @var string
-	 * protected $assetName;
-	 */
-	protected $assetName;
-
-	/*
-	 * @var string
 	 * protected $version;
 	 */
 	protected $version; // = '0.0.0'
+
+	/*
+	 * @var array
+	 * protected $publishedData;
+	 */
+	protected $publishedData;
+
+	/*
+	 * @var array
+	 * protected $staticData;
+	 */
+	protected $staticData;
 
 	/*
 	 * @var array
@@ -102,30 +108,50 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 * public $publishOptions = [];
 	 */
 
-/*
-		'jqueryAsset' => array(
-			'name' => 'jquery',
-			'version' => '3.3.1',
-			'published' => [
-				'sourcePath' => '@p2m@/jquery',
-				'js' => [
-					'jquery-##-version-##.min.js',
-				],
+	/*
+return array(
+	'assetName' => array(
+		'version' => 'version',
+		'published' => [
+			'fullPath' => 'fullPath',
+			'sourcePath' => 'sourcePath',
+			'css' => [
 			],
-			'static' => [
-				'baseUrl' => 'https://code.jquery.com',
-				'js' => [
-					'jquery-##-version-##.min.js',
-				],
-				'jsIntegrity' => 'sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT',
-				'crossorigin' => 'anonymous',
+			'js' => [
 			],
-		),
+		],
+		'static' => [
+			'fullUrl' => 'fullUrl',
+			'baseUrl' => 'baseUrl',
+			'css' => [
+			],
+			'cssIntegrity' => 'cssIntegrity',
+			'js' => [
+			],
+			'jsIntegrity' => 'jsIntegrity',
+			'crossorigin' => 'anonymous',
+		],
+		'cssOptions' => [
+		],
+		'jsOptions' => [
+		],
+		'depends' => [
+		],
+		'publishOptions' => [
+		],
+	),
+);
+	 */
 
- */
-
-	protected function configureAssetFromData($assetData)
+	protected function configureDataFileAsset()
 	{
+		if(self::useStatic() && isset($this->staticData)) {
+			$this->configureStaticAsset($this->staticData);
+		} elseif(isset($this->publishedData)) {
+			$this->configurePublishedAsset($this->publishedData);
+		} else {
+			return;
+		}
 	}
 
 	protected function configureAsset($assetData)
