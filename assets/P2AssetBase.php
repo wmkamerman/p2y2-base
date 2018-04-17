@@ -25,13 +25,6 @@ namespace p2m\base\assets;
 
 use p2m\base\helpers\AssetsSettings;
 
-/**
- * Load this asset with...
- * p2m\assets\base\P2AssetBase::register($this);
- *
- * or specify as a dependency with...
- *     'p2m\assets\base\P2AssetBase',
- */
 class P2AssetBase extends \yii\web\AssetBundle
 {
 	/*
@@ -48,41 +41,37 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 	/*
 	 * @var array
-	 * protected $publishedData;
+	 * protected $assetData;
 	 */
-	protected $publishedData;
-
-	/*
-	 * @var array
-	 * protected $staticData;
-	 */
-	protected $staticData;
-
-	/*
-	 * @var array
-	 * protected $resourceData;
-	 */
-	protected $resourceData = [];
+	protected $assetData;
 
 	/*
 	 * @var string
-	 * private $_p2mPath;
+	 * private static $_p2mPath;
 	 */
-	private $_p2mPath;
+	private static $_p2mPath;
 
 	/*
 	 * @var boolean
-	 * private $_useStatic = false;
+	 * private static $_useStatic = false;
 	 */
 	private static $_useStatic;
 
 	/*
 	 * @var array | false
-	 * private $_assetsEnd = false;
+	 * private static $_assetsEnd = false;
 	 */
 	private static $_assetsEnd;
 
+	/*
+	 * @var string | false
+	 * private static $_bootswatch = false;
+	 */
+	private static $_bootswatch;
+
 	/**
+	 * Yii asset properties
+	 *
 	 * @var string
 	 * public $sourcePath;
 	 *
@@ -109,27 +98,15 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 */
 
 	/*
-return array(
+	 * P2 asset data structure
+
 	'assetName' => array(
 		'version' => 'version',
-		'published' => [
-			'fullPath' => 'fullPath',
-			'sourcePath' => 'sourcePath',
-			'css' => [
-			],
-			'js' => [
-			],
+		'sourcePath' => 'sourcePath',
+		'baseUrl' => 'baseUrl',
+		'css' => [
 		],
-		'static' => [
-			'fullUrl' => 'fullUrl',
-			'baseUrl' => 'baseUrl',
-			'css' => [
-			],
-			'cssIntegrity' => 'cssIntegrity',
-			'js' => [
-			],
-			'jsIntegrity' => 'jsIntegrity',
-			'crossorigin' => 'anonymous',
+		'js' => [
 		],
 		'cssOptions' => [
 		],
@@ -140,39 +117,42 @@ return array(
 		'publishOptions' => [
 		],
 	),
-);
+
 	 */
 
-	protected function configureDataFileAsset()
+	protected function setAssetProperties()
 	{
-		if(self::useStatic() && isset($this->staticData)) {
-			$this->configureStaticAsset($this->staticData);
-		} elseif(isset($this->publishedData)) {
-			$this->configurePublishedAsset($this->publishedData);
-		} else {
-			return;
+		if(array_key_exists('version', $this->assetData)) {
+			$this->version = $this->assetData['version'];
 		}
-	}
-
-	protected function configureAsset($assetData)
-	{
-		if(isset($assetData['cssOptions'])) {
-			$this->cssOptions = $assetData['cssOptions'];
+		if(array_key_exists('css', $this->assetData)) {
+			$this->css = $this->assetData['css'];
 		}
-		if(isset($assetData['jsOptions'])) {
-			$this->jsOptions = $assetData['jsOptions'];
+		if(array_key_exists('js', $this->assetData)) {
+			$this->js = $this->assetData['js'];
 		}
-		if(isset($assetData['depends'])) {
-			$this->depends = $assetData['depends'];
+		if(array_key_exists('cssOptions', $this->assetData)) {
+			$this->cssOptions = $this->assetData['cssOptions'];
 		}
-		if(isset($assetData['publishOptions'])) {
-			$this->publishOptions = $assetData['publishOptions'];
+		if(array_key_exists('jsOptions', $this->assetData)) {
+			$this->jsOptions = $this->assetData['jsOptions'];
+		}
+		if(array_key_exists('depends', $this->assetData)) {
+			$this->depends = $this->assetData['depends'];
+		}
+		if(array_key_exists('publishOptions', $this->assetData)) {
+			$this->publishOptions = $this->assetData['publishOptions'];
 		}
 
-		if(self::useStatic() && isset($assetData['static'])) {
-			$this->configureStaticAsset($assetData['static']);
-		} elseif(isset($assetData['published'])) {
-			$this->configurePublishedAsset($assetData['published']);
+		if(array_key_exists('baseUrl', $this->assetData) && self::useStatic()) {
+			$this->baseUrl = 'https://' . $this->assetData['baseUrl'];
+			self::insertAssetVersion($this->baseUrl);
+			$this->sourcePath = null;
+		} elseif(array_key_exists('sourcePath', $this->assetData)) {
+			$this->sourcePath = $this->assetData['sourcePath'];
+			self::insertAssetVersion($this->sourcePath);
+			self::insertP2mPath($this->sourcePath);
+			$this->baseUrl = null;
 		} else {
 			return;
 		}
@@ -182,7 +162,7 @@ return array(
 	{
 		if(isset($assetData['baseUrl'])) {
 			$this->baseUrl = $assetData['baseUrl'];
-			$this->insertAssetVersion($this->baseUrl);
+			self::insertAssetVersion($this->baseUrl);
 		}
 		if(isset($assetData['css'])) {
 			$this->css = $assetData['css'];
@@ -196,8 +176,8 @@ return array(
 	{
 		if(isset($assetData['sourcePath'])) {
 			$this->sourcePath = $assetData['sourcePath'];
-			$this->insertAssetVersion($this->sourcePath);
-			$this->insertP2mPath($this->sourcePath);
+			self::insertAssetVersion($this->sourcePath);
+			self::insertP2mPath($this->sourcePath);
 		}
 
 		if(isset($assetData['css'])) {
@@ -210,27 +190,26 @@ return array(
 
 	// ===== utility functions ===== //
 
-	protected function p2mPath()
-	{
-		if(isset($this->_p2mPath)) {
-			return $this->_p2mPath;
-		}
-
-		$this->_p2mPath = '@vendor/p2made/' . $this->_p2mProjectId . '/vendor';
-
-		return $this->_p2mPath;
-	}
-
-	protected function insertP2mPath(&$target)
-	{
-		$target = str_replace('@p2m@', $this->p2mPath(), $target);
-	}
-
-	protected function insertAssetVersion(&$target)
+	protected static function insertAssetVersion(&$target)
 	{
 		if(isset($this->version)) {
 			$target = str_replace('##-version-##', $this->version, $target);
 		}
+	}
+
+	protected static function p2mPath()
+	{
+		if(isset(self::$_p2mPath)) {
+			return self::$_p2mPath;
+		}
+
+		self::$_p2mPath = '@vendor/p2made/' . $this->_p2mProjectId . '/vendor';
+		return self::$_p2mPath;
+	}
+
+	protected static function insertP2mPath(&$target)
+	{
+		$target = str_replace('@p2m@', self::p2mPath(), $target);
 	}
 
 	/**
@@ -245,23 +224,21 @@ return array(
 		}
 
 		self::$_useStatic = AssetsSettings::assetsUseStatic();
-
 		return self::$_useStatic;
 	}
 
 	/**
-	 * Get assetsEnd setting - static application end
-	 * @return array | false
+	 * Get bootswatch setting - use static resources
+	 * @return boolean
 	 * @default false
 	 */
-	protected static function assetsEnd()
+	protected static function bootswatch()
 	{
-		if(isset($_assetsEnd)) {
-			return $_assetsEnd;
+		if(isset(self::$_bootswatch)) {
+			return self::$_bootswatch;
 		}
 
-		$_assetsEnd = AssetsSettings::assetsassetsEnd();
-
-		return $_assetsEnd;
+		self::$_bootswatch = AssetsSettings::bootswatchTheme();
+		return self::$_bootswatch;
 	}
 }
