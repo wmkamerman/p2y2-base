@@ -116,45 +116,73 @@ class P2AssetBase extends \yii\web\AssetBundle
 		],
 		'publishOptions' => [
 		],
+		'cssIntegrity' => [
+			'published' => 'published-hash',
+			'static' => 'static-hash',
+		],
+		'jsIntegrity' => [
+			'published' => 'published-hash',
+			'static' => 'static-hash',
+		],
 	),
 
 	 */
 
 	protected function setAssetProperties()
 	{
-		if(array_key_exists('version', $this->assetData)) {
-			$this->version = $this->assetData['version'];
+		$data = $this->assetData; // just to shorten following code
+
+		if(isset($data['version'])) {
+			$this->version = $data['version'];
 		}
-		if(array_key_exists('css', $this->assetData)) {
-			$this->css = $this->assetData['css'];
+		if(isset($data['css'])) {
+			$this->css = $data['css'];
 		}
-		if(array_key_exists('js', $this->assetData)) {
-			$this->js = $this->assetData['js'];
+		if(isset($data['js'])) {
+			$this->js = $data['js'];
 		}
-		if(array_key_exists('cssOptions', $this->assetData)) {
-			$this->cssOptions = $this->assetData['cssOptions'];
+		if(isset($data['cssOptions'])) {
+			$this->cssOptions = $data['cssOptions'];
 		}
-		if(array_key_exists('jsOptions', $this->assetData)) {
-			$this->jsOptions = $this->assetData['jsOptions'];
+		if(isset($data['jsOptions'])) {
+			$this->jsOptions = $data['jsOptions'];
 		}
-		if(array_key_exists('depends', $this->assetData)) {
-			$this->depends = $this->assetData['depends'];
+		if(isset($data['depends'])) {
+			$this->depends = $data['depends'];
 		}
-		if(array_key_exists('publishOptions', $this->assetData)) {
-			$this->publishOptions = $this->assetData['publishOptions'];
+		if(isset($data['publishOptions'])) {
+			$this->publishOptions = $data['publishOptions'];
 		}
 
-		if(array_key_exists('baseUrl', $this->assetData) && self::useStatic()) {
-			$this->baseUrl = 'https://' . $this->assetData['baseUrl'];
+		if(isset($data['baseUrl']) && self::useStatic()) {
+			$this->baseUrl = 'https://' . $data['baseUrl'];
 			self::insertAssetVersion($this->baseUrl);
 			$this->sourcePath = null;
-		} elseif(array_key_exists('sourcePath', $this->assetData)) {
-			$this->sourcePath = $this->assetData['sourcePath'];
+			$this->insertIntegrity('static');
+		} elseif(isset($data['sourcePath'])) {
+			$this->sourcePath = $data['sourcePath'];
 			self::insertAssetVersion($this->sourcePath);
 			self::insertP2mPath($this->sourcePath);
 			$this->baseUrl = null;
+			$this->insertIntegrity('published');
 		} else {
 			return;
+		}
+	}
+
+	private function insertIntegrity($data, $mode = 'static')
+	{
+		if (isset($data['cssIntegrity'][$mode])) {
+			$this->cssOptions = [
+				'integrity' => $data['cssIntegrity'][$mode],
+				'crossorigin' => 'anonymous',
+			];
+		}
+		if (isset($data['jsIntegrity'][$mode])) {
+			$this->jsOptions = [
+				'integrity' => $data['jsIntegrity'][$mode],
+				'crossorigin' => 'anonymous',
+			];
 		}
 	}
 
