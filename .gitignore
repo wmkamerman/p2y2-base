@@ -1,5 +1,8 @@
-!assets/.gitignore
-protected/runtime/*
-!protected/runtime/.gitignore
-protected/data/*.db
-themes/classic/views/
+# Mac DS_Store Files
+.DS_Store
+
+# windows thumbnail cache
+Thumbs.db
+
+/z.gitignore
+/z.orig
