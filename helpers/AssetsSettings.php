@@ -30,14 +30,12 @@ class AssetsSettings extends P2Settings
 
 	const USE_STATIC = 'useStatic';
 	const STATIC_END = 'staticEnd';
-	const BOOTSWATCH = 'bootswatch';
 
 	/**
 	 * Constants define defaults for settings block
 	 */
 	const DEFAULT_USE_STATIC = false;
 	const DEFAULT_STATIC_END = false;
-	const DEFAULT_BOOTSWATCH = false;
 
 	/**
 	 * @var array | false assets settings
@@ -55,12 +53,6 @@ class AssetsSettings extends P2Settings
 	 * @default false
 	 */
 	private static $_staticEnd;
-
-	/**
-	 * @var string | false Bootswatch theme
-	 * @default false
-	 */
-	private static $_bootswatch;
 
 	/**
 	 * Get assets settings
@@ -111,25 +103,6 @@ class AssetsSettings extends P2Settings
 			self::assetsSettings(),
 			self::STATIC_END,
 			self::DEFAULT_STATIC_END
-		);
-	}
-
-	/**
-	 * Get bootswatchTheme setting
-	 * @return string | false
-	 * @default false
-	 */
-	public static function bootswatchTheme()
-	{
-		if(isset(self::$_bootswatch)) {
-			return self::$_bootswatch;
-		}
-
-		return self::getSettingsItem(
-			self::$_bootswatch,
-			self::assetsSettings(),
-			self::BOOTSWATCH,
-			self::DEFAULT_BOOTSWATCH
 		);
 	}
 }

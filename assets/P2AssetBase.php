@@ -25,6 +25,13 @@ namespace p2m\base\assets;
 
 use p2m\base\helpers\AssetsSettings;
 
+/**
+ * Load this asset with...
+ * p2m\assets\base\P2AssetBase::register($this);
+ *
+ * or specify as a dependency with...
+ *     'p2m\assets\base\P2AssetBase',
+ */
 class P2AssetBase extends \yii\web\AssetBundle
 {
 	/*
@@ -35,43 +42,41 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 	/*
 	 * @var string
+	 * protected $assetName;
+	 */
+	protected $assetName;
+
+	/*
+	 * @var string
 	 * protected $version;
 	 */
 	protected $version; // = '0.0.0'
 
 	/*
 	 * @var array
-	 * protected $assetData;
+	 * protected $resourceData;
 	 */
-	protected $assetData;
+	protected $resourceData = [];
 
 	/*
 	 * @var string
-	 * private static $_p2mPath;
+	 * private $_p2mPath;
 	 */
-	private static $_p2mPath;
+	private $_p2mPath;
 
 	/*
 	 * @var boolean
-	 * private static $_useStatic = false;
+	 * private $_useStatic = false;
 	 */
 	private static $_useStatic;
 
 	/*
 	 * @var array | false
-	 * private static $_assetsEnd = false;
+	 * private $_assetsEnd = false;
 	 */
 	private static $_assetsEnd;
 
-	/*
-	 * @var string | false
-	 * private static $_bootswatch = false;
-	 */
-	private static $_bootswatch;
-
 	/**
-	 * Yii asset properties
-	 *
 	 * @var string
 	 * public $sourcePath;
 	 *
@@ -97,92 +102,53 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 * public $publishOptions = [];
 	 */
 
-	/*
-	 * P2 asset data structure
+/*
+		'jqueryAsset' => array(
+			'name' => 'jquery',
+			'version' => '3.3.1',
+			'published' => [
+				'sourcePath' => '@p2m@/jquery',
+				'js' => [
+					'jquery-##-version-##.min.js',
+				],
+			],
+			'static' => [
+				'baseUrl' => 'https://code.jquery.com',
+				'js' => [
+					'jquery-##-version-##.min.js',
+				],
+				'jsIntegrity' => 'sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT',
+				'crossorigin' => 'anonymous',
+			],
+		),
 
-	'assetName' => array(
-		'version' => 'version',
-		'sourcePath' => 'sourcePath',
-		'baseUrl' => 'baseUrl',
-		'css' => [
-		],
-		'js' => [
-		],
-		'cssOptions' => [
-		],
-		'jsOptions' => [
-		],
-		'depends' => [
-		],
-		'publishOptions' => [
-		],
-		'cssIntegrity' => [
-			'published' => 'published-hash',
-			'static' => 'static-hash',
-		],
-		'jsIntegrity' => [
-			'published' => 'published-hash',
-			'static' => 'static-hash',
-		],
-	),
+ */
 
-	 */
-
-	protected function setAssetProperties()
+	protected function configureAssetFromData($assetData)
 	{
-		$data = $this->assetData; // just to shorten following code
-
-		if(isset($data['version'])) {
-			$this->version = $data['version'];
-		}
-		if(isset($data['css'])) {
-			$this->css = $data['css'];
-		}
-		if(isset($data['js'])) {
-			$this->js = $data['js'];
-		}
-		if(isset($data['cssOptions'])) {
-			$this->cssOptions = $data['cssOptions'];
-		}
-		if(isset($data['jsOptions'])) {
-			$this->jsOptions = $data['jsOptions'];
-		}
-		if(isset($data['depends'])) {
-			$this->depends = $data['depends'];
-		}
-		if(isset($data['publishOptions'])) {
-			$this->publishOptions = $data['publishOptions'];
-		}
-
-		if(isset($data['baseUrl']) && self::useStatic()) {
-			$this->baseUrl = 'https://' . $data['baseUrl'];
-			self::insertAssetVersion($this->baseUrl);
-			$this->sourcePath = null;
-			$this->insertIntegrity('static');
-		} elseif(isset($data['sourcePath'])) {
-			$this->sourcePath = $data['sourcePath'];
-			self::insertAssetVersion($this->sourcePath);
-			self::insertP2mPath($this->sourcePath);
-			$this->baseUrl = null;
-			$this->insertIntegrity('published');
-		} else {
-			return;
-		}
 	}
 
-	private function insertIntegrity($data, $mode = 'static')
+	protected function configureAsset($assetData)
 	{
-		if (isset($data['cssIntegrity'][$mode])) {
-			$this->cssOptions = [
-				'integrity' => $data['cssIntegrity'][$mode],
-				'crossorigin' => 'anonymous',
-			];
+		if(isset($assetData['cssOptions'])) {
+			$this->cssOptions = $assetData['cssOptions'];
 		}
-		if (isset($data['jsIntegrity'][$mode])) {
-			$this->jsOptions = [
-				'integrity' => $data['jsIntegrity'][$mode],
-				'crossorigin' => 'anonymous',
-			];
+		if(isset($assetData['jsOptions'])) {
+			$this->jsOptions = $assetData['jsOptions'];
+		}
+		if(isset($assetData['depends'])) {
+			$this->depends = $assetData['depends'];
+		}
+		if(isset($assetData['publishOptions'])) {
+			$this->publishOptions = $assetData['publishOptions'];
+		}
+
+		if(self::useStatic() && isset($assetData['static'])) {
+			$this->configureStaticAsset($assetData['static']);
+		} elseif(isset($assetData['published'])) {
+			$this->configurePublishedAsset($assetData['published']);
+		} else {
+			return;
 		}
 	}
 
@@ -190,7 +156,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 	{
 		if(isset($assetData['baseUrl'])) {
 			$this->baseUrl = $assetData['baseUrl'];
-			self::insertAssetVersion($this->baseUrl);
+			$this->insertAssetVersion($this->baseUrl);
 		}
 		if(isset($assetData['css'])) {
 			$this->css = $assetData['css'];
@@ -204,8 +170,8 @@ class P2AssetBase extends \yii\web\AssetBundle
 	{
 		if(isset($assetData['sourcePath'])) {
 			$this->sourcePath = $assetData['sourcePath'];
-			self::insertAssetVersion($this->sourcePath);
-			self::insertP2mPath($this->sourcePath);
+			$this->insertAssetVersion($this->sourcePath);
+			$this->insertP2mPath($this->sourcePath);
 		}
 
 		if(isset($assetData['css'])) {
@@ -218,26 +184,27 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 	// ===== utility functions ===== //
 
-	protected static function insertAssetVersion(&$target)
+	protected function p2mPath()
+	{
+		if(isset($this->_p2mPath)) {
+			return $this->_p2mPath;
+		}
+
+		$this->_p2mPath = '@vendor/p2made/' . $this->_p2mProjectId . '/vendor';
+
+		return $this->_p2mPath;
+	}
+
+	protected function insertP2mPath(&$target)
+	{
+		$target = str_replace('@p2m@', $this->p2mPath(), $target);
+	}
+
+	protected function insertAssetVersion(&$target)
 	{
 		if(isset($this->version)) {
 			$target = str_replace('##-version-##', $this->version, $target);
 		}
-	}
-
-	protected static function p2mPath()
-	{
-		if(isset(self::$_p2mPath)) {
-			return self::$_p2mPath;
-		}
-
-		self::$_p2mPath = '@vendor/p2made/' . $this->_p2mProjectId . '/vendor';
-		return self::$_p2mPath;
-	}
-
-	protected static function insertP2mPath(&$target)
-	{
-		$target = str_replace('@p2m@', self::p2mPath(), $target);
 	}
 
 	/**
@@ -252,21 +219,23 @@ class P2AssetBase extends \yii\web\AssetBundle
 		}
 
 		self::$_useStatic = AssetsSettings::assetsUseStatic();
+
 		return self::$_useStatic;
 	}
 
 	/**
-	 * Get bootswatch setting - use static resources
-	 * @return boolean
+	 * Get assetsEnd setting - static application end
+	 * @return array | false
 	 * @default false
 	 */
-	protected static function bootswatch()
+	protected static function assetsEnd()
 	{
-		if(isset(self::$_bootswatch)) {
-			return self::$_bootswatch;
+		if(isset($_assetsEnd)) {
+			return $_assetsEnd;
 		}
 
-		self::$_bootswatch = AssetsSettings::bootswatchTheme();
-		return self::$_bootswatch;
+		$_assetsEnd = AssetsSettings::assetsassetsEnd();
+
+		return $_assetsEnd;
 	}
 }
