@@ -102,33 +102,114 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 * public $publishOptions = [];
 	 */
 
-/*
-		'jqueryAsset' => array(
-			'name' => 'jquery',
-			'version' => '3.3.1',
-			'published' => [
-				'sourcePath' => '@p2m@/jquery',
-				'js' => [
-					'jquery-##-version-##.min.js',
-				],
-			],
-			'static' => [
-				'baseUrl' => 'https://code.jquery.com',
-				'js' => [
-					'jquery-##-version-##.min.js',
-				],
-				'jsIntegrity' => 'sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT',
-				'crossorigin' => 'anonymous',
-			],
-		),
+	/*
+	 * P2 asset data structure
+	 *
 
- */
+	protected $resourceData = array(
+		'static' => [
+			'baseUrl' => 'baseUrl',
+			'css' => [
+				'css/cssfile.css',
+			],
+			'cssOptions' => [ // iff there are static specific cssOptions
+				'integrity' => 'static-hash', // iff css has hash[s]
+				'crossorigin' => 'anonymous', // iff css has hash[s]
+			],
+			//'cssIntegrity' => [
+			//	'static-hash',
+			//],
+			'js' => [
+				'js/jsfile.js', // or
+			],
+			'jsOptions' => [ // iff there are static specific jsOptions
+				'integrity' => 'static-hash', // iff js has hash[s]
+				'crossorigin' => 'anonymous', // iff js has hash[s]
+			],
+			//'jsIntegrity' => [
+			//	'static-hash',
+			//],
+			'depends' => [ // iff there are static specific depends
+			],
+			'publishOptions' => [ // iff there are static specific publishOptions
+			],
+		],
+		'published' => [
+			'sourcePath' => 'sourcePath',
+			'css' => [
+				'css/cssfile.css', // or
+			],
+			'cssOptions' => [ // iff there are published specific cssOptions
+				'integrity' => 'published-hash', // iff css has hash[s]
+				'crossorigin' => 'anonymous',    // iff css has hash[s]
+			],
+			//'cssIntegrity' => [
+			//	'published-hash',
+			//],
+			'js' => [
+				'js/jsfile.js', // or
+			],
+			'jsOptions' => [ // iff there are published specific jsOptions
+				'integrity' => 'published-hash', // iff js has hash[s]
+				'crossorigin' => 'anonymous',    // iff js has hash[s]
+			],
+			//'jsIntegrity' => [
+			//	'published-hash',
+			//],
+			'depends' => [ // iff there are published specific depends
+			],
+			'publishOptions' => [ // iff there are published specific publishOptions
+			],
+		],
+		'cssOptions' => [
+		],
+		'jsOptions' => [
+		],
+		'depends' => [
+			'some\useful\ThingAsset',
+		],
+		'publishOptions' => [
+		],
+	);
 
-	protected function configureAssetFromData($assetData)
-	{
-	}
+	 *
+	 */
 
 	protected function configureAsset($assetData)
+	{
+		$this->configureAssetOptions($assetData);
+
+		if(self::useStatic() && isset($assetData['static'])) {
+			//$this->configureStaticAsset($assetData['static']);
+			$assetData = $assetData['static'];
+
+			if(isset($assetData['baseUrl'])) {
+				$this->baseUrl = $assetData['baseUrl'];
+				$this->insertAssetVersion($this->baseUrl);
+			}
+		}
+		elseif(isset($assetData['published'])) {
+			//$this->configurePublishedAsset($assetData['published']);
+			$assetData = $assetData['published'];
+
+			if(isset($assetData['sourcePath'])) {
+				$this->sourcePath = $assetData['sourcePath'];
+				$this->insertAssetVersion($this->sourcePath);
+				$this->insertP2mPath($this->sourcePath);
+			}
+		}
+
+		if(isset($assetData['css'])) {
+			$this->css = $assetData['css'];
+		}
+		if(isset($assetData['js'])) {
+			$this->js = $assetData['js'];
+		}
+
+		$this->configureAssetOptions($assetData);
+	}
+
+	protected function configureAssetOptions($assetData)
 	{
 		if(isset($assetData['cssOptions'])) {
 			$this->cssOptions = $assetData['cssOptions'];
@@ -141,44 +222,6 @@ class P2AssetBase extends \yii\web\AssetBundle
 		}
 		if(isset($assetData['publishOptions'])) {
 			$this->publishOptions = $assetData['publishOptions'];
-		}
-
-		if(self::useStatic() && isset($assetData['static'])) {
-			$this->configureStaticAsset($assetData['static']);
-		} elseif(isset($assetData['published'])) {
-			$this->configurePublishedAsset($assetData['published']);
-		} else {
-			return;
-		}
-	}
-
-	protected function configureStaticAsset($assetData)
-	{
-		if(isset($assetData['baseUrl'])) {
-			$this->baseUrl = $assetData['baseUrl'];
-			$this->insertAssetVersion($this->baseUrl);
-		}
-		if(isset($assetData['css'])) {
-			$this->css = $assetData['css'];
-		}
-		if(isset($assetData['js'])) {
-			$this->js = $assetData['js'];
-		}
-	}
-
-	protected function configurePublishedAsset($assetData)
-	{
-		if(isset($assetData['sourcePath'])) {
-			$this->sourcePath = $assetData['sourcePath'];
-			$this->insertAssetVersion($this->sourcePath);
-			$this->insertP2mPath($this->sourcePath);
-		}
-
-		if(isset($assetData['css'])) {
-			$this->css = $assetData['css'];
-		}
-		if(isset($assetData['js'])) {
-			$this->js = $assetData['js'];
 		}
 	}
 
