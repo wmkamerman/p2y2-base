@@ -40,11 +40,21 @@ class _ExampleAsset extends P2AssetBase
 				'js/js_file.js',
 			],
 			/**
+			 * OPTIONAL : Only include if we have integrity hashs.
+			 */
+			'cssIntegrity' => [
+				'published-hash',
+			],
+			'jsIntegrity' => [
+				'published-hash',
+			],
+		],
+			/**
 			 * OPTIONAL :
 			 * Use 'endName' for custom assets belonging to one application end,
 			 * AND when you have a static application end to publish asset to,
 			 * AND when you want to publish asset to an end specific folder
-			 * leave any of the above is NOT true
+			 * leave out if any of the above is NOT true
 			 */
 			//
 			'endName' = 'endName',
@@ -62,6 +72,15 @@ class _ExampleAsset extends P2AssetBase
 			],
 			'js' => [
 				'js/js_file.js',
+			],
+			/**
+			 * OPTIONAL : Only include if we have integrity hashs.
+			 */
+			'cssIntegrity' => [
+				'static-hash',
+			],
+			'jsIntegrity' => [
+				'static-hash',
 			],
 		],
 

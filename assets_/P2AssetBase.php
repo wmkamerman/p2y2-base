@@ -42,39 +42,39 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 	/*
 	 * @var string
-	 * protected $assetName;
-	 */
-	protected $assetName;
-
-	/*
-	 * @var string
 	 * protected $version;
 	 */
 	protected $version; // = '0.0.0'
 
 	/*
 	 * @var array
-	 * protected $resourceData;
+	 * protected $assetData;
 	 */
-	protected $resourceData = [];
+	protected $assetData;
 
 	/*
 	 * @var string
-	 * private $_p2mPath;
+	 * private static $_p2mPath;
 	 */
-	private $_p2mPath;
+	private static $_p2mPath;
 
 	/*
 	 * @var boolean
-	 * private $_useStatic = false;
+	 * private static $_useStatic = false;
 	 */
 	private static $_useStatic;
 
 	/*
 	 * @var array | false
-	 * private $_assetsEnd = false;
+	 * private static $_assetsEnd = false;
 	 */
 	private static $_assetsEnd;
+
+	/*
+	 * @var string | false
+	 * private static $_bootswatch = false;
+	 */
+	private static $_bootswatch;
 
 	/**
 	 * @var string
@@ -124,9 +124,89 @@ class P2AssetBase extends \yii\web\AssetBundle
 
  */
 
-	protected function configureAssetFromData($assetData)
-	{
+	/*
+	 * P2 asset data structure
+	 *
+
+	protected $version = '4.7.0';
+
+	protected $resourceData = array(
+		'static' => [
+			'baseUrl' => 'baseUrl',
+			'css' => [
+				'css/cssfile.css',
+			],
+			'cssOptions' => [ // iff there are static specific cssOptions
+				'integrity' => 'static-hash', // iff css has hash[s]
+				'crossorigin' => 'anonymous', // iff css has hash[s]
+			],
+			'js' => [
+				'js/jsfile.js', // or
+			],
+			'jsOptions' => [ // iff there are static specific jsOptions
+				'integrity' => 'static-hash', // iff js has hash[s]
+				'crossorigin' => 'anonymous', // iff js has hash[s]
+			],
+			'depends' => [ // iff there are static specific depends
+			],
+			'publishOptions' => [ // iff there are static specific publishOptions
+			],
+		],
+		'published' => [
+			'sourcePath' => 'sourcePath',
+			'css' => [
+				'css/cssfile.css', // or
+			],
+			'cssOptions' => [ // iff there are published specific cssOptions
+				'integrity' => 'published-hash', // iff css has hash[s]
+				'crossorigin' => 'anonymous',    // iff css has hash[s]
+			],
+			'js' => [
+				'js/jsfile.js', // or
+				['js/jsfile.js', 'integrity' => 'published-hash'],
+			],
+			'jsOptions' => [ // iff there are published specific jsOptions
+				'integrity' => 'published-hash', // iff js has hash[s]
+				'crossorigin' => 'anonymous',    // iff js has hash[s]
+			],
+			'depends' => [ // iff there are published specific depends
+			],
+			'publishOptions' => [ // iff there are published specific publishOptions
+			],
+		],
+		'cssOptions' => [
+		],
+		'jsOptions' => [
+		],
+		'depends' => [
+			'some\useful\ThingAsset',
+		],
+		'publishOptions' => [
+		],
+	);
+
+
+
+		if(isset($data['baseUrl']) && self::useStatic()) {
+
+			$this->baseUrl = 'https://' . $data['baseUrl'];
+			$this->sourcePath = null;
+			$this->insertIntegrity('static');
+		} elseif(isset($data['sourcePath'])) {
+			$this->sourcePath = $data['sourcePath'];
+			self::insertP2mPath($this->sourcePath);
+			$this->baseUrl = null;
+			$this->insertIntegrity('published');
+		} else {
+			return;
+		}
 	}
+
+
+
+
+	 *
+	 */
 
 	protected function configureAsset($assetData)
 	{
@@ -147,8 +227,6 @@ class P2AssetBase extends \yii\web\AssetBundle
 			$this->configureStaticAsset($assetData['static']);
 		} elseif(isset($assetData['published'])) {
 			$this->configurePublishedAsset($assetData['published']);
-		} else {
-			return;
 		}
 	}
 
@@ -172,6 +250,8 @@ class P2AssetBase extends \yii\web\AssetBundle
 			$this->sourcePath = $assetData['sourcePath'];
 			$this->insertAssetVersion($this->sourcePath);
 			$this->insertP2mPath($this->sourcePath);
+			//self::insertAssetVersion($this->sourcePath);
+			//self::insertP2mPath($this->sourcePath);
 		}
 
 		if(isset($assetData['css'])) {
@@ -182,22 +262,46 @@ class P2AssetBase extends \yii\web\AssetBundle
 		}
 	}
 
+	private function insertIntegrity($data, $mode = 'static')
+	{
+		if (isset($data['cssIntegrity'][$mode])) {
+			$this->cssOptions = [
+				'integrity' => $data['cssIntegrity'][$mode],
+				'crossorigin' => 'anonymous',
+			];
+		}
+		if (isset($data['jsIntegrity'][$mode])) {
+			$this->jsOptions = [
+				'integrity' => $data['jsIntegrity'][$mode],
+				'crossorigin' => 'anonymous',
+			];
+		}
+	}
+
+	protected function configureAssetFromData($assetData)
+	{
+	}
+
 	// ===== utility functions ===== //
 
 	protected function p2mPath()
 	{
 		if(isset($this->_p2mPath)) {
 			return $this->_p2mPath;
+			//return self::$_p2mPath;
 		}
 
 		$this->_p2mPath = '@vendor/p2made/' . $this->_p2mProjectId . '/vendor';
 
 		return $this->_p2mPath;
+		//self::$_p2mPath = '@vendor/p2made/' . $this->_p2mProjectId . '/vendor';
+		//return self::$_p2mPath;
 	}
 
 	protected function insertP2mPath(&$target)
 	{
 		$target = str_replace('@p2m@', $this->p2mPath(), $target);
+		//$target = str_replace('@p2m@', self::p2mPath(), $target);
 	}
 
 	protected function insertAssetVersion(&$target)
@@ -238,4 +342,22 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 		return $_assetsEnd;
 	}
+
+	/**
+	 * Get bootswatch setting - use static resources
+	 * @return boolean
+	 * @default false
+	 */
+	protected static function bootswatch()
+	{
+		if(isset(self::$_bootswatch)) {
+			return self::$_bootswatch;
+		}
+
+		self::$_bootswatch = AssetsSettings::bootswatchTheme();
+		return self::$_bootswatch;
+	}
 }
+
+
+
