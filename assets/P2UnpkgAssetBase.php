@@ -1,6 +1,6 @@
 <?php
 /**
- * P2AssetBase.php
+ * P2UnpkgAssetBase.php
  *
  * @copyright Copyright &copy; Pedro Plowman, 2017
  * @author Pedro Plowman
@@ -8,7 +8,7 @@
  * @license MIT
  *
  * @package p2made/yii2-p2y2-base
- * @class \p2m\base\assets\P2AssetBase
+ * @class \p2m\base\assets\P2UnpkgAssetBase
  */
 
 /**
@@ -27,12 +27,12 @@ use p2m\base\helpers\AssetsSettings;
 
 /**
  * Load this asset with...
- * p2m\assets\base\P2AssetBase::register($this);
+ * p2m\assets\base\P2UnpkgAssetBase::register($this);
  *
  * or specify as a dependency with...
- *     'p2m\assets\base\P2AssetBase',
+ *     'p2m\assets\base\P2UnpkgAssetBase',
  */
-class P2AssetBase extends \yii\web\AssetBundle
+class P2UnpkgAssetBase extends \yii\web\AssetBundle
 {
 	/*
 	 * @var string
@@ -293,3 +293,10 @@ class P2AssetBase extends \yii\web\AssetBundle
 		return $_assetsEnd;
 	}
 }
+
+
+https://unpkg.com/react@16.7.0/umd/react.production.min.js
+
+
+unpkg.com/:package@:version/:file
+
