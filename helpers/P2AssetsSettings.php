@@ -1,6 +1,6 @@
 <?php
 /**
- * AssetsSettings.php
+ * P2AssetsSettings.php
  *
  * @copyright Copyright &copy; Pedro Plowman, 2017
  * @author Pedro Plowman
@@ -8,7 +8,7 @@
  * @license MIT
  *
  * @package p2made/yii2-p2y2-base
- * @class \p2m\base\helpers\AssetsSettings
+ * @class \p2m\base\helpers\P2AssetsSettings
  */
 
 namespace p2m\base\helpers;
@@ -19,7 +19,7 @@ use Yii;
  * Settings for p2m assets
  * Located here to be used in multiple packages
  */
-class AssetsSettings extends P2Settings
+class P2AssetsSettings extends P2Settings
 {
 	/**
 	 *

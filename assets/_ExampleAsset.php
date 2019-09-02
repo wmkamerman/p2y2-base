@@ -24,32 +24,7 @@ class _ExampleAsset extends P2AssetBase
 {
 	protected $version = '0.0.0';
 
-	private $resourceData = array(
-
-		/**
-		 * 'published' section
-		 * use this for published version of assets
-		 * leave out if there's no published version
-		 */
-		'published' => [
-			'sourcePath' => '@path/to/assets/folder',
-			'css' => [
-				'css/css_file.css',
-			],
-			'js' => [
-				'js/js_file.js',
-			],
-			/**
-			 * OPTIONAL :
-			 * Use 'endName' for custom assets belonging to one application end,
-			 * AND when you have a static application end to publish asset to,
-			 * AND when you want to publish asset to an end specific folder
-			 * leave any of the above is NOT true
-			 */
-			//
-			'endName' = 'endName',
-		],
-
+	private $assetData = [
 		/**
 		 * 'static' section
 		 * use this for static version of assets
@@ -64,21 +39,41 @@ class _ExampleAsset extends P2AssetBase
 				'js/js_file.js',
 			],
 		],
-
+		/**
+		 * 'published' section
+		 * use this for published version of assets
+		 * leave out if there's no published version
+		 */
+		'published' => [
+			'sourcePath' => '@path/to/assets/folder',
+			'css' => [
+				'css/css_file.css',
+			],
+			'js' => [
+				'js/js_file.js',
+			],
+		],
+		'css' => [
+		],
 		'cssOptions' => [
-			// cssOptions like any other assets
-			// or leave out if no cssOptions
+		],
+		'js' => [
 		],
 		'jsOptions' => [
-			// jsOptions like any other assets
-			// or leave out if no jsOptions
 		],
 		'depends' => [
-			// depends like any other assets
-			// or leave out if no depends
 		],
 
-	);
+		/**
+		 * OPTIONAL :
+		 * Use 'endName' for custom assets belonging to one application end,
+		 * AND when you have a static application end to publish asset to,
+		 * AND when you want to publish asset to an end specific folder
+		 * leave any of the above is NOT true
+		 */
+		//
+		'endName' = 'endName',
+	];
 
 	public function init()
 	{
