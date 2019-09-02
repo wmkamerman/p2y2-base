@@ -2,7 +2,7 @@
 /**
  * _ExampleUnpkgAsset.php
  *
- * @copyright Copyright &copy; Pedro Plowman, 2017
+ * @copyright Copyright &copy; Pedro Plowman, 2019
  * @author Pedro Plowman
  * @link https://github.com/p2made
  * @license MIT
@@ -22,11 +22,13 @@ namespace p2m\base\assets; /* edit this if using elsewhere */
  */
 class _ExampleUnpkgAsset extends \p2m\base\assets\P2UnpkgAssetBase
 {
-	protected $unpkgName = 'unpkgName';
+	protected $_p2mProjectId = 'yii2-p2y2-project';
 
 	protected $version = '0.0.0';
 
-	protected $unpkgPath = 'unpkgPath';
+	protected $unpkgName = 'assetName';
+
+	protected $assetPath = 'unpkgPath';
 
 	public $depends = [
 		'depends'

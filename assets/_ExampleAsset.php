@@ -2,7 +2,7 @@
 /**
  * _ExampleAsset.php
  *
- * @copyright Copyright &copy; Pedro Plowman, 2017
+ * @copyright Copyright &copy; Pedro Plowman, 2019
  * @author Pedro Plowman
  * @link https://github.com/p2made
  * @license MIT
@@ -22,11 +22,7 @@ namespace p2m\base\assets; /* edit this if using elsewhere */
  */
 class _ExampleAsset extends \p2m\base\assets\P2AssetBase
 {
-	/*
-	 * @var string
-	 * private $_p2mProjectId;
-	 */
-	protected $_p2mProjectId = 'yii2-p2y2-base';
+	protected $_p2mProjectId = 'yii2-p2y2-project';
 
 	protected $version = '0.0.0';
 

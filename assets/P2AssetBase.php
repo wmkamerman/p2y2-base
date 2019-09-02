@@ -34,44 +34,30 @@ use p2m\base\helpers\P2AssetsSettings;
  */
 class P2AssetBase extends \yii\web\AssetBundle
 {
-	/*
+	/**
 	 * @var string
 	 * public $sourcePath;
-	 */
-
-	/*
+	 *
 	 * @var string
 	 * public $baseUrl;
-	 */
-
-	/*
+	 *
 	 * @var array
-	 * public $js;
-	 */
-
-	/*
+	 * public $css = [];
+	 *
 	 * @var array
-	 * public $css;
-	 */
-
-	/*
+	 * public $cssOptions = [];
+	 *
 	 * @var array
-	 * public $jsOptions;
-	 */
-
-	/*
+	 * public $js = [];
+	 *
 	 * @var array
-	 * public $cssOptions;
-	 */
-
-	/*
+	 * public $jsOptions = [];
+	 *
 	 * @var array
-	 * public $publishOptions;
-	 */
-
-	/*
+	 * public $depends = [];
+	 *
 	 * @var array
-	 * public $depends;
+	 * public $publishOptions = [];
 	 */
 
 // ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ #####
@@ -84,15 +70,21 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 	/*
 	 * @var string
+	 * protected $version;
+	 */
+	protected $version; // = '0.0.0'
+
+	/*
+	 * @var string
 	 * protected $assetName;
 	 */
 	protected $assetName;
 
 	/*
 	 * @var string
-	 * protected $version;
+	 * private $packagePath;
 	 */
-	protected $version; // = '0.0.0'
+	protected $assetPath;
 
 	/*
 	 * @var array
@@ -123,32 +115,6 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 * private $_p2mPath;
 	 */
 	private $_p2mPath;
-
-	/**
-	 * @var string
-	 * public $sourcePath;
-	 *
-	 * @var string
-	 * public $baseUrl;
-	 *
-	 * @var array
-	 * public $css = [];
-	 *
-	 * @var array
-	 * public $cssOptions = [];
-	 *
-	 * @var array
-	 * public $js = [];
-	 *
-	 * @var array
-	 * public $jsOptions = [];
-	 *
-	 * @var array
-	 * public $depends = [];
-	 *
-	 * @var array
-	 * public $publishOptions = [];
-	 */
 
 	/*
 	 * P2 asset data structure
@@ -259,6 +225,28 @@ class P2AssetBase extends \yii\web\AssetBundle
 		$this->setAssetVariables($assetData);
 	}
 
+	protected function configureUnpkgAsset()
+	{
+		if(self::useStatic()) {
+			$this->baseUrl = "https://unpkg.com/" . $this->assetName . "@" . $this->version;
+			if (isset($this->assetPath)) {
+				$this->baseUrl .= "/" . $this->assetPath;
+			}
+		}
+		else {
+			$this->sourcePath = "@npm/" . $this->assetName;
+			if (isset($this->assetPath)) {
+				$this->sourcePath .= "/" . $this->assetPath;
+			}
+		}
+	}
+
+	protected function configureCdnjsAsset()
+	{
+	}
+
+	// ===== utility functions ===== //
+
 	protected function setAssetVariables($assetData)
 	{
 		if(!isset($this->js) && isset($assetData['js'])) {
@@ -280,8 +268,6 @@ class P2AssetBase extends \yii\web\AssetBundle
 			$this->depends = $assetData['depends'];
 		}
 	}
-
-	// ===== utility functions ===== //
 
 	protected function insertAssetVersion(&$target)
 	{
