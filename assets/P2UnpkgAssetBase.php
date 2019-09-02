@@ -23,8 +23,6 @@
 
 namespace p2m\base\assets;
 
-use p2m\base\helpers\AssetsSettings;
-
 /**
  * Load this asset with...
  * p2m\assets\base\P2UnpkgAssetBase::register($this);

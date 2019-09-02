@@ -20,8 +20,14 @@ namespace p2m\base\assets; /* edit this if using elsewhere */
  * or specify as a dependency with...
  *     'p2m\assets\_ExampleAsset',
  */
-class _ExampleAsset extends P2AssetBase
+class _ExampleAsset extends \p2m\base\assets\P2AssetBase
 {
+	/*
+	 * @var string
+	 * private $_p2mProjectId;
+	 */
+	protected $_p2mProjectId = 'yii2-p2y2-base';
+
 	protected $version = '0.0.0';
 
 	private $assetData = [
@@ -71,7 +77,6 @@ class _ExampleAsset extends P2AssetBase
 		 * AND when you want to publish asset to an end specific folder
 		 * leave any of the above is NOT true
 		 */
-		//
 		'endName' = 'endName',
 	];
 

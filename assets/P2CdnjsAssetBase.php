@@ -1,6 +1,6 @@
 <?php
 /**
- * P2AssetBase.php
+ * P2CdnjsAssetBase.php
  *
  * @copyright Copyright &copy; Pedro Plowman, 2017
  * @author Pedro Plowman
@@ -8,7 +8,7 @@
  * @license MIT
  *
  * @package p2made/yii2-p2y2-base
- * @class \p2m\base\assets\P2AssetBase
+ * @class \p2m\base\assets\P2CdnjsAssetBase
  */
 
 /**
@@ -23,16 +23,14 @@
 
 namespace p2m\base\assets;
 
-use p2m\base\helpers\P2AssetsSettings;
-
 /**
  * Load this asset with...
- * p2m\assets\base\P2AssetBase::register($this);
+ * p2m\assets\base\P2CdnjsAssetBase::register($this);
  *
  * or specify as a dependency with...
- *     'p2m\assets\base\P2AssetBase',
+ *     'p2m\assets\base\P2CdnjsAssetBase',
  */
-class P2AssetBase extends \yii\web\AssetBundle
+class P2CdnjsAssetBase extends \p2m\base\assets\P2CdnjsAssetBase
 {
 	/*
 	 * @var string
