@@ -26,9 +26,9 @@ class _ExampleUnpkgAsset extends \p2m\base\assets\P2UnpkgAssetBase
 
 	protected $version = '0.0.0';
 
-	protected $unpkgName = 'assetName';
+	protected $assetName = 'assetName';
 
-	protected $assetPath = 'unpkgPath';
+	protected $assetPath = 'assetPath';
 
 	public $depends = [
 		'depends'
