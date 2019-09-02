@@ -30,10 +30,6 @@ class _ExampleUnpkgAsset extends \p2m\base\assets\P2UnpkgAssetBase
 
 	protected $assetPath = 'assetPath';
 
-	public $depends = [
-		'depends'
-	];
-
 	public $js = [
 		'javascipt.min.js'
 	];
@@ -48,6 +44,10 @@ class _ExampleUnpkgAsset extends \p2m\base\assets\P2UnpkgAssetBase
 
 	public $cssOptions = [
 		'cssOptions'
+	];
+
+	public $depends = [
+		'depends'
 	];
 
 	public $publishOptions = [
