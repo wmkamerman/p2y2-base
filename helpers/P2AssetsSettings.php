@@ -19,7 +19,7 @@ use Yii;
  * Settings for p2m assets
  * Located here to be used in multiple packages
  */
-class P2AssetsSettings extends P2Settings
+class P2AssetsSettings extends p2m\base\helpers\P2Settings
 {
 	/**
 	 *
