@@ -11,8 +11,6 @@
  * @class \p2m\base\assets\_ExampleAsset
  */
 
-namespace p2m\base\assets; /* edit this if using elsewhere */
-
 /**
  * Load this asset with...
  * p2m\assets\_ExampleAsset::register($this);
@@ -20,6 +18,9 @@ namespace p2m\base\assets; /* edit this if using elsewhere */
  * or specify as a dependency with...
  *     'p2m\assets\_ExampleAsset',
  */
+
+namespace p2m\base\assets; /* edit this if using elsewhere */
+
 class _ExampleAsset extends \p2m\base\assets\P2AssetBase
 {
 	protected $_p2mProjectId = 'yii2-p2y2-project';

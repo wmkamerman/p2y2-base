@@ -11,8 +11,6 @@
  * @class \p2m\base\assets\_ExampleUnpkgAsset
  */
 
-namespace p2m\base\assets; /* edit this if using elsewhere */
-
 /**
  * Load this asset with...
  * p2m\assets\_ExampleUnpkgAsset::register($this);
@@ -20,6 +18,9 @@ namespace p2m\base\assets; /* edit this if using elsewhere */
  * or specify as a dependency with...
  *     'p2m\assets\_ExampleUnpkgAsset',
  */
+
+namespace p2m\base\assets; /* edit this if using elsewhere */
+
 class _ExampleUnpkgAsset extends \p2m\base\assets\P2UnpkgAssetBase
 {
 	protected $_p2mProjectId = 'yii2-p2y2-project';
@@ -31,7 +32,7 @@ class _ExampleUnpkgAsset extends \p2m\base\assets\P2UnpkgAssetBase
 	protected $assetPath = 'assetPath';
 
 	public $js = [
-		'javascipt.min.js'
+		'js'
 	];
 
 	public $css = [

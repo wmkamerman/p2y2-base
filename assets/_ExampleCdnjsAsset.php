@@ -11,8 +11,6 @@
  * @class \p2m\base\assets\_ExampleCdnjsAsset
  */
 
-namespace p2m\base\assets; /* edit this if using elsewhere */
-
 /**
  * Load this asset with...
  * p2m\assets\_ExampleCdnjsAsset::register($this);
@@ -20,6 +18,9 @@ namespace p2m\base\assets; /* edit this if using elsewhere */
  * or specify as a dependency with...
  *     'p2m\assets\_ExampleCdnjsAsset',
  */
+
+namespace p2m\base\assets; /* edit this if using elsewhere */
+
 class _ExampleCdnjsAsset extends P2AssetBase
 {
 	protected $version = '0.0.0';
