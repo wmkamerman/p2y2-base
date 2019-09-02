@@ -56,7 +56,7 @@ class _ExampleUnpkgAsset extends \p2m\base\assets\P2UnpkgAssetBase
 
 	public function init()
 	{
-		$this->configureAsset();
+		$this->configureUnpkgAsset();
 		parent::init();
 	}
 }
