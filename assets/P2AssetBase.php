@@ -164,6 +164,10 @@ class P2AssetBase extends \yii\web\AssetBundle
 		$this->setAssetVariables($assetData);
 	}
 
+	protected function configureAssetNew()
+	{
+	}
+
 	protected function configureUnpkgAsset()
 	{
 		$this->setAssetVariable($this->assetVersion, 'version');
