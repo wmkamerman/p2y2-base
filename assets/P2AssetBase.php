@@ -232,14 +232,14 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 	// ===== utility functions ===== //
 
-	protected function setAssetVariable($source, $key, &$target)
+	private function setAssetVariable($source, $key, &$target)
 	{
 		if(!isset($target) && isset($source[$key])) {
 			$target = $source[$key];
 		}
 	}
 
-	protected function pathTail()
+	private function pathTail()
 	{
 		if(isset($this->assetData['path'])) {
 			return "/" . $this->assetData['path'];
@@ -248,7 +248,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 		return "";
 	}
 
-	protected function setAssetVariables($source)
+	private function setAssetVariables($source)
 	{
 		$this->setAssetVariable($source, 'css', $this->css);
 		$this->setAssetVariable($source, 'js', $this->js);
@@ -258,7 +258,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 		$this->setAssetVariable($source, 'depends', $this->depends);
 	}
 
-	protected function insertAssetVersion(&$target)
+	private function insertAssetVersion(&$target)
 	{
 		if(isset($this->version)) {
 			$target = str_replace('##-version-##', $this->version, $target);
@@ -270,7 +270,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 * @return boolean
 	 * @default false
 	 */
-	protected static function useStatic()
+	private static function useStatic()
 	{
 		if(isset(self::$_useStatic)) {
 			return self::$_useStatic;
@@ -286,7 +286,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 * @return array | false
 	 * @default false
 	 */
-	protected static function assetsEnd()
+	private static function assetsEnd()
 	{
 		if(isset($_assetsEnd)) {
 			return $_assetsEnd;
