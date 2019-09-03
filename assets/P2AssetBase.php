@@ -168,30 +168,42 @@ class P2AssetBase extends \yii\web\AssetBundle
 	{
 	}
 
-	protected function configureUnpkgAsset()
+	protected function configureCdnjsAsset()
 	{
-		$this->setAssetVariable($this->assetVersion, 'version');
-
-		// Create tail for paths
-		$tail = "";
-		if(isset($this->assetData['path'])) {
-			$tail = "/" . $this->assetData['path'];
-		}
+		$this->setAssetVariable($source, 'version', $this->assetVersion);
 
 		// $baseUrl OR $sourcePath
 		if(self::useStatic()) {
-			$this->baseUrl = "https://unpkg.com/" . $this->assetName . "@" . $this->assetVersion . $tail;
+			$this->baseUrl = "https://cdnjs.cloudflare.com/ajax/libs/" . $this->assetName
+				. "/" . $this->assetVersion . $this->pathTail();
+			if(isset($this->assetData['static'])) {
+				$this->setAssetVariables($this->assetData['static']);
+			}
 		}
 		else {
-			$this->sourcePath = "@npm/" . $this->assetName . $tail;
+			$this->sourcePath = $this->sourcePath . $this->pathTail();
+			if(isset($this->assetData['published'])) {
+				$this->setAssetVariables($this->assetData['published']);
+			}
 		}
 
-		// Set variables...
-		$this->setAssetVariables();
+		$this->setAssetVariables($this->assetData);
 	}
 
-	protected function configureCdnjsAsset()
+	protected function configureUnpkgAsset()
 	{
+		$this->setAssetVariable($source, 'version', $this->assetVersion);
+
+		// $baseUrl OR $sourcePath
+		if(self::useStatic()) {
+			$this->baseUrl = "https://unpkg.com/" . $this->assetName
+				. "@" . $this->assetVersion . $this->pathTail();
+		}
+		else {
+			$this->sourcePath = "@npm/" . $this->assetName . $this->pathTail();
+		}
+
+		$this->setAssetVariables($this->assetData);
 	}
 
 	protected function configureVendorAsset()
@@ -200,26 +212,35 @@ class P2AssetBase extends \yii\web\AssetBundle
 		$this->sourcePath = $this->assetData['sourcePath']
 
 		// Set variables...
-		$this->setAssetVariables();
+		$this->setAssetVariables($this->assetData);
 	}
 
 	// ===== utility functions ===== //
 
-	protected function setAssetVariable(&$variable, $key)
+	protected function setAssetVariable($source, $key, &$target)
 	{
-		if(!isset($variable) && isset($this->assetData[$key])) {
-			$variable = $this->assetData[$key];
+		if(!isset($target) && isset($source[$key])) {
+			$target = $source[$key];
 		}
 	}
 
-	protected function setAssetVariables()
+	protected function pathTail()
 	{
-		$this->setAssetVariable($this->css, 'css');
-		$this->setAssetVariable($this->js, 'js');
-		$this->setAssetVariable($this->cssOptions, 'cssOptions');
-		$this->setAssetVariable($this->jsOptions, 'jsOptions');
-		$this->setAssetVariable($this->publishOptions, 'publishOptions');
-		$this->setAssetVariable($this->depends, 'depends');
+		if(isset($this->assetData['path'])) {
+			return "/" . $this->assetData['path'];
+		}
+
+		return "";
+	}
+
+	protected function setAssetVariables($source)
+	{
+		$this->setAssetVariable($source, 'css', $this->css);
+		$this->setAssetVariable($source, 'js', $this->js);
+		$this->setAssetVariable($source, 'cssOptions', $this->cssOptions);
+		$this->setAssetVariable($source, 'jsOptions', $this->jsOptions);
+		$this->setAssetVariable($source, 'publishOptions', $this->publishOptions);
+		$this->setAssetVariable($source, 'depends', $this->depends);
 	}
 
 	protected function insertAssetVersion(&$target)
