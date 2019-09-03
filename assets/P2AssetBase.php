@@ -115,10 +115,10 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 * public $css = [];
 	 *
 	 * @var array
-	 * public $cssOptions = [];
+	 * public $js = [];
 	 *
 	 * @var array
-	 * public $js = [];
+	 * public $cssOptions = [];
 	 *
 	 * @var array
 	 * public $jsOptions = [];
@@ -164,7 +164,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 		$this->setAssetVariables($assetData);
 	}
 
-	protected function configureUnpkgAsset($assetData = [])
+	protected function configureUnpkgAsset()
 	{
 		// Create tail for paths
 		$tail = (isset($this->assetPath) ? "/" . $this->assetPath : "");
@@ -177,7 +177,39 @@ class P2AssetBase extends \yii\web\AssetBundle
 			$this->sourcePath = "@npm/" . $this->assetName . $tail;
 		}
 
-		// Create tail for paths
+		// Set variables...
+		if ()
+
+		protected $version;
+
+		protected $assetPath;
+
+		public $css;
+
+		public $js;
+
+		public $cssOptions;
+
+		public $jsOptions;
+
+		public $publishOptions;
+
+		public $depends;
+
+
+		/*
+		$assetVariables = [
+			$this->version,
+			$this->css,
+			$this->cssOptions,
+			$this->js,
+			$this->jsOptions,
+			$this->publishOptions,
+			$this->depends,
+		];
+		*/
+
+
 
 	}
 
@@ -189,6 +221,12 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 	protected function setAssetVariable(&$assetVariable, $variableData)
 	{
+		if(!isset($assetVariable)) { $assetVariable = $variableData; }
+
+
+
+
+
 		if(!isset($assetVariable)) { $assetVariable = $variableData; }
 	}
 
