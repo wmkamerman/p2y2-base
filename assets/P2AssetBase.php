@@ -183,12 +183,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 		}
 
 		// Set variables...
-		$this->setAssetVariable($this->css, 'css');
-		$this->setAssetVariable($this->js, 'js');
-		$this->setAssetVariable($this->cssOptions, 'cssOptions');
-		$this->setAssetVariable($this->jsOptions, 'jsOptions');
-		$this->setAssetVariable($this->publishOptions, 'publishOptions');
-		$this->setAssetVariable($this->depends, 'depends');
+		$this->setAssetVariables();
 	}
 
 	protected function configureCdnjsAsset()
@@ -197,6 +192,11 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 	protected function configureVendorAsset()
 	{
+		// Set $sourcePath
+		$this->sourcePath = $this->assetData['sourcePath']
+
+		// Set variables...
+		$this->setAssetVariables();
 	}
 
 	// ===== utility functions ===== //
@@ -208,26 +208,14 @@ class P2AssetBase extends \yii\web\AssetBundle
 		}
 	}
 
-	protected function setAssetVariables($assetData)
+	protected function setAssetVariables()
 	{
-		if(!isset($this->js) && isset($assetData['js'])) {
-			$this->js = $assetData['js'];
-		}
-		if(!isset($this->css) && isset($assetData['css'])) {
-			$this->css = $assetData['css'];
-		}
-		if(!isset($this->jsOptions) && isset($assetData['jsOptions'])) {
-			$this->jsOptions = $assetData['jsOptions'];
-		}
-		if(!isset($this->cssOptions) && isset($assetData['cssOptions'])) {
-			$this->cssOptions = $assetData['cssOptions'];
-		}
-		if(!isset($this->publishOptions) && isset($assetData['publishOptions'])) {
-			$this->publishOptions = $assetData['publishOptions'];
-		}
-		if(!isset($this->depends) && isset($assetData['depends'])) {
-			$this->depends = $assetData['depends'];
-		}
+		$this->setAssetVariable($this->css, 'css');
+		$this->setAssetVariable($this->js, 'js');
+		$this->setAssetVariable($this->cssOptions, 'cssOptions');
+		$this->setAssetVariable($this->jsOptions, 'jsOptions');
+		$this->setAssetVariable($this->publishOptions, 'publishOptions');
+		$this->setAssetVariable($this->depends, 'depends');
 	}
 
 	protected function insertAssetVersion(&$target)
