@@ -195,6 +195,10 @@ class P2AssetBase extends \yii\web\AssetBundle
 	{
 	}
 
+	protected function configureVendorAsset()
+	{
+	}
+
 	// ===== utility functions ===== //
 
 	protected function setAssetVariable(&$variable, $key)
