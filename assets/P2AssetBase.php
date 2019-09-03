@@ -54,7 +54,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 * @var string
 	 * protected $version;
 	 */
-	protected $version; // = '0.0.0'
+	protected $assetVersion; // = '0.0.0'
 
 	/*
 	 * @var string
@@ -166,51 +166,29 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 	protected function configureUnpkgAsset()
 	{
+		$this->setAssetVariable($this->assetVersion, 'version');
+
 		// Create tail for paths
-		$tail = (isset($this->assetPath) ? "/" . $this->assetPath : "");
+		$tail = "";
+		if(isset($this->assetData['path'])) {
+			$tail = "/" . $this->assetData['path'];
+		}
 
 		// $baseUrl OR $sourcePath
 		if(self::useStatic()) {
-			$this->baseUrl = "https://unpkg.com/" . $this->assetName . "@" . $this->version . $tail;
+			$this->baseUrl = "https://unpkg.com/" . $this->assetName . "@" . $this->assetVersion . $tail;
 		}
 		else {
 			$this->sourcePath = "@npm/" . $this->assetName . $tail;
 		}
 
 		// Set variables...
-		if ()
-
-		protected $version;
-
-		protected $assetPath;
-
-		public $css;
-
-		public $js;
-
-		public $cssOptions;
-
-		public $jsOptions;
-
-		public $publishOptions;
-
-		public $depends;
-
-
-		/*
-		$assetVariables = [
-			$this->version,
-			$this->css,
-			$this->cssOptions,
-			$this->js,
-			$this->jsOptions,
-			$this->publishOptions,
-			$this->depends,
-		];
-		*/
-
-
-
+		$this->setAssetVariable($this->css, 'css');
+		$this->setAssetVariable($this->js, 'js');
+		$this->setAssetVariable($this->cssOptions, 'cssOptions');
+		$this->setAssetVariable($this->jsOptions, 'jsOptions');
+		$this->setAssetVariable($this->publishOptions, 'publishOptions');
+		$this->setAssetVariable($this->depends, 'depends');
 	}
 
 	protected function configureCdnjsAsset()
@@ -219,15 +197,11 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 	// ===== utility functions ===== //
 
-	protected function setAssetVariable(&$assetVariable, $variableData)
+	protected function setAssetVariable(&$variable, $key)
 	{
-		if(!isset($assetVariable)) { $assetVariable = $variableData; }
-
-
-
-
-
-		if(!isset($assetVariable)) { $assetVariable = $variableData; }
+		if(!isset($variable) && isset($this->assetData[$key])) {
+			$variable = $this->assetData[$key];
+		}
 	}
 
 	protected function setAssetVariables($assetData)
