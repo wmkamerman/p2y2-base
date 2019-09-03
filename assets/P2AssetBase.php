@@ -140,6 +140,10 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 	protected function newConfigureAsset()
 	{
+		if(isset($this->assetData['package'])) {
+			$this->assetName = $this->assetData['package'];
+		}
+
 		switch ($this->assetData['pattern']) {
 			case 'cdnjs';
 				$this->configureCdnjsAsset();
