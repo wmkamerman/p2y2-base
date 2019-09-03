@@ -34,10 +34,70 @@ use p2m\base\helpers\P2AssetsSettings;
  */
 class P2AssetBase extends \yii\web\AssetBundle
 {
+// ##### ^ ##### ^ P2M Asset Variables ^ ##### ^ #####
+
+	/*
+	 * @var string
+	 * protected $assetName;
+	 * The simple name of the package that the asset is built on.
+	 */
+	protected $assetName;
+
+	/*
+	 * @var string
+	 * private $_p2mProjectId;
+	 * Every P2M asset should have a project identifier.
+	 */
+	protected $_p2mProjectId = 'yii2-p2y2-base';
+
+	/*
+	 * @var string
+	 * protected $version;
+	 */
+	protected $version; // = '0.0.0'
+
+	/*
+	 * @var string
+	 * private $packagePath;
+	 */
+	protected $assetPath;
+
+	/*
+	 * @var array
+	 * protected $resourceData;
+	 */
+	protected $resourceData = [];
+
+// ##### ^ ##### ^ Private Variables ^ ##### ^ #####
+
+	/*
+	 * @var boolean
+	 * private $_useStatic = false;
+	 */
+	private static $_useStatic;
+
+	/*
+	 * @var array | false
+	 * private $_assetsEnd = false;
+	 */
+	private static $_assetsEnd;
+
+	/*
+	 * @var bool | false
+	 * private $_assetsEnd = false;
+	 */
+	private static $_aliasSet = false;
+
+	/*
+	 * @var string
+	 * private $_p2mPath;
+	 * Working to get rid of this.
+	 */
+	private $_p2mPath;
+
+// ##### ^ ##### ^ Yii2 Asset Variables ^ ##### ^ #####
+
 	/**
-	 * Yii2 asset variables.
-	 *
-	 *
 	 * @var string
 	 * public $baseUrl;
 	 *
@@ -61,135 +121,6 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 *
 	 * @var array
 	 * public $depends = [];
-	 */
-
-// ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ #####
-
-	/*
-	 * @var string
-	 * protected $version;
-	 */
-	protected $version; // = '0.0.0'
-
-	/*
-	 * @var string
-	 * private $_p2mProjectId;
-	 */
-	protected $_p2mProjectId = 'yii2-p2y2-base';
-
-	/*
-	 * @var string
-	 * protected $assetName;
-	 */
-	protected $assetName;
-
-	/*
-	 * @var string
-	 * private $packagePath;
-	 */
-	protected $assetPath;
-
-	/*
-	 * @var array
-	 * protected $resourceData;
-	 */
-	protected $resourceData = [];
-
-	/*
-	 * @var boolean
-	 * private $_useStatic = false;
-	 */
-	private static $_useStatic;
-
-	/*
-	 * @var array | false
-	 * private $_assetsEnd = false;
-	 */
-	private static $_assetsEnd;
-
-	/*
-	 * @var bool | false
-	 * private $_assetsEnd = false;
-	 */
-	private static $_aliasSet = false;
-
-	/*
-	 * @var string
-	 * private $_p2mPath;
-	 */
-	private $_p2mPath;
-
-	/*
-	 * P2 asset data structure
-	 *
-
-	protected $resourceData = array(
-		'static' => [
-			'baseUrl' => 'baseUrl',
-			'css' => [
-				'css/cssfile.css',
-			],
-			'cssOptions' => [ // iff there are static specific cssOptions
-				'integrity' => 'static-hash', // iff css has hash[s]
-				'crossorigin' => 'anonymous', // iff css has hash[s]
-			],
-			//'cssIntegrity' => [
-			//	'static-hash',
-			//],
-			'js' => [
-				'js/jsfile.js', // or
-			],
-			'jsOptions' => [ // iff there are static specific jsOptions
-				'integrity' => 'static-hash', // iff js has hash[s]
-				'crossorigin' => 'anonymous', // iff js has hash[s]
-			],
-			//'jsIntegrity' => [
-			//	'static-hash',
-			//],
-			'depends' => [ // iff there are static specific depends
-			],
-			'publishOptions' => [ // iff there are static specific publishOptions
-			],
-		],
-		'published' => [
-			'sourcePath' => 'sourcePath',
-			'css' => [
-				'css/cssfile.css', // or
-			],
-			'cssOptions' => [ // iff there are published specific cssOptions
-				'integrity' => 'published-hash', // iff css has hash[s]
-				'crossorigin' => 'anonymous',    // iff css has hash[s]
-			],
-			//'cssIntegrity' => [
-			//	'published-hash',
-			//],
-			'js' => [
-				'js/jsfile.js', // or
-			],
-			'jsOptions' => [ // iff there are published specific jsOptions
-				'integrity' => 'published-hash', // iff js has hash[s]
-				'crossorigin' => 'anonymous',    // iff js has hash[s]
-			],
-			//'jsIntegrity' => [
-			//	'published-hash',
-			//],
-			'depends' => [ // iff there are published specific depends
-			],
-			'publishOptions' => [ // iff there are published specific publishOptions
-			],
-		],
-		'cssOptions' => [
-		],
-		'jsOptions' => [
-		],
-		'depends' => [
-			'some\useful\ThingAsset',
-		],
-		'publishOptions' => [
-		],
-	);
-
-	 *
 	 */
 
 	public function __construct()
