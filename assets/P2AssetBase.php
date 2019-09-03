@@ -66,6 +66,13 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 * @var array
 	 * protected $resourceData;
 	 */
+	protected $assetData = [];
+
+	/*
+	 * @var array
+	 * protected $resourceData;
+	 * ##### Deprecated in favour of $assetData #####
+	 */
 	protected $resourceData = [];
 
 // ##### ^ ##### ^ Private Variables ^ ##### ^ #####
@@ -91,7 +98,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 	/*
 	 * @var string
 	 * private $_p2mPath;
-	 * Working to get rid of this.
+	 * ##### Working to get rid of this #####
 	 */
 	private $_p2mPath;
 
@@ -131,12 +138,10 @@ class P2AssetBase extends \yii\web\AssetBundle
 		}
 	}
 
-	protected function configureAsset($resourceData)
+	protected function configureAsset($assetData = [])
 	{
-		$assetData = $resourceData;
-
-		if(self::useStatic() && isset($resourceData['static'])) {
-			$tempData = $resourceData['static'];
+		if(self::useStatic() && isset($assetData['static'])) {
+			$tempData = $assetData['static'];
 
 			if(isset($tempData['baseUrl'])) {
 				$this->baseUrl = $this->insertAssetVersion($tempData['baseUrl']);
@@ -159,20 +164,21 @@ class P2AssetBase extends \yii\web\AssetBundle
 		$this->setAssetVariables($assetData);
 	}
 
-	protected function configureUnpkgAsset()
+	protected function configureUnpkgAsset($assetData = [])
 	{
+		// Create tail for paths
+		$tail = (isset($this->assetPath) ? "/" . $this->assetPath : "");
+
+		// $baseUrl OR $sourcePath
 		if(self::useStatic()) {
-			$this->baseUrl = "https://unpkg.com/" . $this->assetName . "@" . $this->version;
-			if (isset($this->assetPath)) {
-				$this->baseUrl .= "/" . $this->assetPath;
-			}
+			$this->baseUrl = "https://unpkg.com/" . $this->assetName . "@" . $this->version . $tail;
 		}
 		else {
-			$this->sourcePath = "@npm/" . $this->assetName;
-			if (isset($this->assetPath)) {
-				$this->sourcePath .= "/" . $this->assetPath;
-			}
+			$this->sourcePath = "@npm/" . $this->assetName . $tail;
 		}
+
+		// Create tail for paths
+
 	}
 
 	protected function configureCdnjsAsset()
@@ -180,6 +186,11 @@ class P2AssetBase extends \yii\web\AssetBundle
 	}
 
 	// ===== utility functions ===== //
+
+	protected function setAssetVariable(&$assetVariable, $variableData)
+	{
+		if(!isset($assetVariable)) { $assetVariable = $variableData; }
+	}
 
 	protected function setAssetVariables($assetData)
 	{
