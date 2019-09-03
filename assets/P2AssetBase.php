@@ -35,11 +35,14 @@ use p2m\base\helpers\P2AssetsSettings;
 class P2AssetBase extends \yii\web\AssetBundle
 {
 	/**
-	 * @var string
-	 * public $sourcePath;
+	 * Yii2 asset variables.
+	 *
 	 *
 	 * @var string
 	 * public $baseUrl;
+	 *
+	 * @var string
+	 * public $sourcePath;
 	 *
 	 * @var array
 	 * public $css = [];
@@ -54,25 +57,25 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 * public $jsOptions = [];
 	 *
 	 * @var array
-	 * public $depends = [];
+	 * public $publishOptions = [];
 	 *
 	 * @var array
-	 * public $publishOptions = [];
+	 * public $depends = [];
 	 */
 
 // ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ #####
 
 	/*
 	 * @var string
-	 * private $_p2mProjectId;
-	 */
-	protected $_p2mProjectId = 'yii2-p2y2-base';
-
-	/*
-	 * @var string
 	 * protected $version;
 	 */
 	protected $version; // = '0.0.0'
+
+	/*
+	 * @var string
+	 * private $_p2mProjectId;
+	 */
+	protected $_p2mProjectId = 'yii2-p2y2-base';
 
 	/*
 	 * @var string
