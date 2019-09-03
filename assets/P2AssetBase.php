@@ -138,6 +138,21 @@ class P2AssetBase extends \yii\web\AssetBundle
 		}
 	}
 
+	protected function newConfigureAsset()
+	{
+		switch ($this->assetData['pattern']) {
+			case 'cdnjs';
+				$this->configureCdnjsAsset();
+				break;
+			case 'unpkg';
+				$this->configureUnpkgAsset();
+				break;
+			case 'vendor';
+				$this->configureVendorAsset();
+				break;
+		}
+	}
+
 	protected function configureAsset($assetData = [])
 	{
 		if(self::useStatic() && isset($assetData['static'])) {
@@ -164,11 +179,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 		$this->setAssetVariables($assetData);
 	}
 
-	protected function configureAssetNew()
-	{
-	}
-
-	protected function configureCdnjsAsset()
+	private function configureCdnjsAsset()
 	{
 		$this->setAssetVariable($source, 'version', $this->assetVersion);
 
@@ -190,7 +201,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 		$this->setAssetVariables($this->assetData);
 	}
 
-	protected function configureUnpkgAsset()
+	private function configureUnpkgAsset()
 	{
 		$this->setAssetVariable($source, 'version', $this->assetVersion);
 
@@ -206,7 +217,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 		$this->setAssetVariables($this->assetData);
 	}
 
-	protected function configureVendorAsset()
+	private function configureVendorAsset()
 	{
 		// Set $sourcePath
 		$this->sourcePath = $this->assetData['sourcePath']
