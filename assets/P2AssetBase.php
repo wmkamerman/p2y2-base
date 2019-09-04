@@ -21,10 +21,6 @@
  * ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ #####
  */
 
-namespace p2m\base\assets;
-
-use p2m\base\helpers\P2AssetsSettings;
-
 /**
  * Load this asset with...
  * p2m\assets\base\P2AssetBase::register($this);
@@ -32,6 +28,11 @@ use p2m\base\helpers\P2AssetsSettings;
  * or specify as a dependency with...
  *     'p2m\assets\base\P2AssetBase',
  */
+
+namespace p2m\base\assets;
+
+use p2m\base\helpers\P2AssetsSettings;
+
 class P2AssetBase extends \yii\web\AssetBundle
 {
 // ##### ^ ##### ^ P2M Asset Variables ^ ##### ^ #####
@@ -182,6 +183,24 @@ class P2AssetBase extends \yii\web\AssetBundle
 		$this->setAssetVariables($assetData);
 	}
 
+	private function configureUnpkgAsset()
+	{
+		$this->setAssetVariable($source, 'version', $this->assetVersion);
+
+		// $baseUrl OR $sourcePath
+		if(self::useStatic()) {
+			$this->baseUrl = "https://unpkg.com/" . $this->assetName
+				. "@" . $this->assetVersion . $this->pathTail();
+		}
+		else {
+			$this->sourcePath = "@npm/" . $this->assetName . $this->pathTail();
+		}
+
+		$this->css = $this->setAssetVariable($this->css, $this->assetData, 'css');
+
+		$this->setAssetVariables($this->assetData);
+	}
+
 	private function configureCdnjsAsset()
 	{
 		$this->setAssetVariable($source, 'version', $this->assetVersion);
@@ -204,22 +223,6 @@ class P2AssetBase extends \yii\web\AssetBundle
 		$this->setAssetVariables($this->assetData);
 	}
 
-	private function configureUnpkgAsset()
-	{
-		$this->setAssetVariable($source, 'version', $this->assetVersion);
-
-		// $baseUrl OR $sourcePath
-		if(self::useStatic()) {
-			$this->baseUrl = "https://unpkg.com/" . $this->assetName
-				. "@" . $this->assetVersion . $this->pathTail();
-		}
-		else {
-			$this->sourcePath = "@npm/" . $this->assetName . $this->pathTail();
-		}
-
-		$this->setAssetVariables($this->assetData);
-	}
-
 	private function configureVendorAsset()
 	{
 		// Set $sourcePath
@@ -231,32 +234,31 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 	// ===== utility functions ===== //
 
-	private function setAssetVariable($source, $key, &$target)
+	private function setAssetVariable($source, $key)
 	{
-		if(!isset($target) && isset($source[$key])) {
-			$target = $source[$key];
-		}
-	}
-
-	private function pathTail()
-	{
-		if(isset($this->assetData['path'])) {
-			return "/" . $this->assetData['path'];
-		}
-
-		return "";
+		if(!isset($target) && isset($source[$key]))
+			$this->$key = $source[$key];
+		$this->$key = $this->$key;
 	}
 
 	private function setAssetVariables($source)
 	{
-		$this->setAssetVariable($source, 'css', $this->css);
-		$this->setAssetVariable($source, 'js', $this->js);
-		$this->setAssetVariable($source, 'cssOptions', $this->cssOptions);
-		$this->setAssetVariable($source, 'jsOptions', $this->jsOptions);
-		$this->setAssetVariable($source, 'publishOptions', $this->publishOptions);
-		$this->setAssetVariable($source, 'depends', $this->depends);
+		$this->setAssetVariable($source, 'css');
+		$this->setAssetVariable($source, 'js');
+		$this->setAssetVariable($source, 'cssOptions');
+		$this->setAssetVariable($source, 'jsOptions');
+		$this->setAssetVariable($source, 'publishOptions');
+		$this->setAssetVariable($source, 'depends');
 	}
 
+	private function pathTail()
+	{
+		if(isset($this->assetData['path']))
+			return '/' . $this->assetData['path'];
+		return '';
+	}
+
+	// ##### Want to get rid of this #####
 	private function insertAssetVersion(&$target)
 	{
 		if(isset($this->version)) {
