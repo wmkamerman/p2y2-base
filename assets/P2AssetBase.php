@@ -103,7 +103,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 */
 	private $_p2mPath;
 
-// ##### ^ ##### ^ Yii2 Asset Variables ^ ##### ^ #####
+// ##### ^ ##### ^ Yii Asset Variables ^ ##### ^ #####
 
 	/**
 	 * @var string
@@ -133,11 +133,25 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 	public function __construct()
 	{
+		/*
+		 * For easier access to p2m stuff we give it an alias
+		 * but only if it hasn't already been set.
+		 * the 2nd asset & after need different names.
+		 * For those we include the package name as...
+		 * 'package' => 'packageName' & swap it in here.
+		 */
 		if(!self::$_aliasSet) {
 			Yii::setAlias('@p2m', '@vendor/p2made');
 			self::$_aliasSet = true;
 		}
 
+		/*
+		 * Usually $assetName is also the name of the package.
+		 * When more than one asset uses the same package
+		 * the 2nd asset & after need different names.
+		 * For those we include the package name as...
+		 * 'package' => 'packageName' & swap it in here.
+		 */
 		if(isset($this->assetData['package'])) {
 			$this->assetName = $this->assetData['package'];
 		}
