@@ -136,27 +136,24 @@ class P2AssetBase extends \yii\web\AssetBundle
 			Yii::setAlias('@p2m', '@vendor/p2made');
 			self::$_aliasSet = true;
 		}
-	}
 
-	public function init()
-	{
 		if(isset($this->assetData['package'])) {
 			$this->assetName = $this->assetData['package'];
 		}
 
 		switch ($this->assetData['pattern']) {
-			case 'cdnjs';
-				$this->configureCdnjsAsset();
-				break;
 			case 'unpkg';
 				$this->configureUnpkgAsset();
+				break;
+			case 'cdnjs';
+				$this->configureCdnjsAsset();
 				break;
 			case 'vendor';
 				$this->configureVendorAsset();
 				break;
+			default:
+				// core asset
 		}
-
-		parent::init();
 	}
 
 	protected function configureAsset($assetData = [])
