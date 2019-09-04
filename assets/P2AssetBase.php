@@ -166,6 +166,9 @@ class P2AssetBase extends \yii\web\AssetBundle
 			case 'cdnjs';
 				$this->configureCdnjsAsset();
 				break;
+			case 'moment';
+				$this->configureMomentAsset();
+				break;
 			case 'vendor';
 				$this->configureVendorAsset();
 				break;
@@ -190,16 +193,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 	{
 		$this->setAssetVariable($source, 'version', $this->assetVersion);
 
-		// $baseUrl OR $sourcePath
-		if(self::useStatic()) {
-			$this->baseUrl = "https://unpkg.com/" . $this->_packageName
-				. "@" . $this->assetVersion . $this->tail();
-		}
-		else {
-			$this->sourcePath = "@npm/" . $this->_packageName . $this->pathTail();
-		}
-
-		$this->css = $this->setAssetVariable($this->css, $this->assetData, 'css');
+		$this->setUnpkgPath();
 
 		$this->setAssetVariables($this->assetData);
 	}
@@ -215,18 +209,41 @@ class P2AssetBase extends \yii\web\AssetBundle
 		// $baseUrl OR $sourcePath
 		if(self::useStatic()) {
 			$this->baseUrl = "https://cdnjs.cloudflare.com/ajax/libs/" . $this->_packageName
-				. "/" . $this->assetVersion . $this->pathTail();
+				. "/" . $this->assetVersion . $this->tail();
 			if(isset($this->assetData['static']))
 				$this->setAssetVariables($this->assetData['static']);
 		}
 		else {
-			$this->sourcePath = $this->sourcePath . $this->pathTail();
+			$this->sourcePath = $this->sourcePath . $this->tail();
 			if(isset($this->assetData['published']))
 				$this->setAssetVariables($this->assetData['published']);
 		}
 
 		// Set any variables not already set
 		$this->setAssetVariables($this->assetData);
+	}
+
+	/*
+	 * Configures an asset described the 'moment' pattern.
+	 */
+	private function configureMomentAsset()
+	{
+		$this->setUnpkgPath();
+	}
+
+	/*
+	 * Sets $baseUrl or $sourcePath for 'unpkg' assets
+	 */
+	private function setUnpkgPath()
+	{
+		// $baseUrl OR $sourcePath
+		if(self::useStatic()) {
+			$this->baseUrl = "https://unpkg.com/" . $this->_packageName
+				. "@" . $this->assetVersion . $this->tail();
+		}
+		else {
+			$this->sourcePath = "@npm/" . $this->_packageName . $this->tail();
+		}
 	}
 
 	/*
@@ -299,7 +316,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 * @return string
 	 * @default ''
 	 */
-	private function pathTail()
+	private function tail()
 	{
 		if(isset($this->assetData['path']))
 			return '/' . $this->assetData['path'];
