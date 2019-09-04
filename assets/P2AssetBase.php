@@ -39,18 +39,18 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 	/*
 	 * @var string
+	 * private $_p2mProjectId;
+	 * Every P2M asset should have a project identifier.
+	 */
+	protected $_p2mProjectId = 'yii2-p2y2-base';
+
+	/*
+	 * @var string
 	 * protected $assetName;
 	 * The simple name of the asset.
 	 * Usually the same as $_packageName
 	 */
 	protected $assetName;
-
-	/*
-	 * @var string
-	 * private $_p2mProjectId;
-	 * Every P2M asset should have a project identifier.
-	 */
-	protected $_p2mProjectId = 'yii2-p2y2-base';
 
 	/*
 	 * @var string
@@ -60,7 +60,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 	/*
 	 * @var array
-	 * protected $resourceData;
+	 * protected $assetData;
 	 */
 	protected $assetData = [];
 
@@ -191,10 +191,8 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 */
 	private function configureUnpkgAsset()
 	{
-		$this->setAssetVariable($source, 'version', $this->assetVersion);
-
+		$this->setAssetVersion();
 		$this->setUnpkgPath();
-
 		$this->setAssetVariables($this->assetData);
 	}
 
@@ -204,7 +202,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 	private function configureCdnjsAsset()
 	{
 		// Assets on CDNJS ALWAYS have versions as '0.0.0'
-		$this->setAssetVariable($source, 'version', $this->assetVersion);
+		$this->setAssetVersion();
 
 		// $baseUrl OR $sourcePath
 		if(self::useStatic()) {
@@ -287,13 +285,19 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 	// ##### ^ ##### UTILITY FUNCTIONS ##### ^ ##### //
 
+	private function setAssetVersion()
+	{
+		if(!isset($this->assetVersion))
+			$this->assetVersion = $this->assetData['version'];
+	}
+
 	/**
 	 * Sets the variable named in $key
 	 * if it is not already set & we have a value for it
 	 */
 	private function setAssetVariable($source, $key)
 	{
-		if(!isset($target) && isset($source[$key]))
+		if(!isset($this->$key) && isset($source[$key]))
 			$this->$key = $source[$key];
 		$this->$key = $this->$key;
 	}
