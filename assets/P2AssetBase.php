@@ -40,7 +40,8 @@ class P2AssetBase extends \yii\web\AssetBundle
 	/*
 	 * @var string
 	 * protected $assetName;
-	 * The simple name of the package that the asset is built on.
+	 * The simple name of the asset.
+	 * Usually the same as $_packageName
 	 */
 	protected $assetName;
 
@@ -77,6 +78,14 @@ class P2AssetBase extends \yii\web\AssetBundle
 	protected $resourceData = [];
 
 // ##### ^ ##### ^ Private Variables ^ ##### ^ #####
+
+	/*
+	 * @var string
+	 * protected $_packageName;
+	 * The simple name of the package that the asset is built on
+	 * Usually the same as $assetName
+	 */
+	private $_packageName;
 
 	/*
 	 * @var boolean
@@ -151,7 +160,9 @@ class P2AssetBase extends \yii\web\AssetBundle
 		 * 'package' => 'packageName' & swap it in here.
 		 */
 		if(isset($this->assetData['package']))
-			$this->assetName = $this->assetData['package'];
+			$this->_packageName = $this->assetData['package'];
+		else
+			$this->_packageName = $this->assetName;
 
 		// Which pattern does the data use?
 		switch ($this->assetData['pattern']) {
@@ -187,11 +198,11 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 		// $baseUrl OR $sourcePath
 		if(self::useStatic()) {
-			$this->baseUrl = "https://unpkg.com/" . $this->assetName
+			$this->baseUrl = "https://unpkg.com/" . $this->_packageName
 				. "@" . $this->assetVersion . $this->tail();
 		}
 		else {
-			$this->sourcePath = "@npm/" . $this->assetName . $this->pathTail();
+			$this->sourcePath = "@npm/" . $this->_packageName . $this->pathTail();
 		}
 
 		$this->css = $this->setAssetVariable($this->css, $this->assetData, 'css');
@@ -209,7 +220,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 		// $baseUrl OR $sourcePath
 		if(self::useStatic()) {
-			$this->baseUrl = "https://cdnjs.cloudflare.com/ajax/libs/" . $this->assetName
+			$this->baseUrl = "https://cdnjs.cloudflare.com/ajax/libs/" . $this->_packageName
 				. "/" . $this->assetVersion . $this->pathTail();
 			if(isset($this->assetData['static']))
 				$this->setAssetVariables($this->assetData['static']);
