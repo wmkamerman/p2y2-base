@@ -137,8 +137,6 @@ class P2AssetBase extends \yii\web\AssetBundle
 		 * For easier access to p2m stuff we give it an alias
 		 * but only if it hasn't already been set.
 		 * the 2nd asset & after need different names.
-		 * For those we include the package name as...
-		 * 'package' => 'packageName' & swap it in here.
 		 */
 		if(!self::$_aliasSet) {
 			Yii::setAlias('@p2m', '@vendor/p2made');
@@ -152,10 +150,10 @@ class P2AssetBase extends \yii\web\AssetBundle
 		 * For those we include the package name as...
 		 * 'package' => 'packageName' & swap it in here.
 		 */
-		if(isset($this->assetData['package'])) {
+		if(isset($this->assetData['package']))
 			$this->assetName = $this->assetData['package'];
-		}
 
+		// Which pattern does the data use?
 		switch ($this->assetData['pattern']) {
 			case 'unpkg';
 				$this->configureUnpkgAsset();
@@ -167,10 +165,78 @@ class P2AssetBase extends \yii\web\AssetBundle
 				$this->configureVendorAsset();
 				break;
 			default:
-				// core asset
+				$this->configureCoreAsset();
 		}
 	}
 
+	/*
+	 * Configures an asset not described by a pattern.
+	 * This should ONLY be on assets that are part of
+	 * P2CoreAsset
+	 */
+	private function configureCoreAsset()
+	{
+	}
+
+	/*
+	 * Configures an asset described the 'unpkg' pattern.
+	 */
+	private function configureUnpkgAsset()
+	{
+		$this->setAssetVariable($source, 'version', $this->assetVersion);
+
+		// $baseUrl OR $sourcePath
+		if(self::useStatic()) {
+			$this->baseUrl = "https://unpkg.com/" . $this->assetName
+				. "@" . $this->assetVersion . $this->tail();
+		}
+		else {
+			$this->sourcePath = "@npm/" . $this->assetName . $this->pathTail();
+		}
+
+		$this->css = $this->setAssetVariable($this->css, $this->assetData, 'css');
+
+		$this->setAssetVariables($this->assetData);
+	}
+
+	/*
+	 * Configures an asset described the 'cdnjs' pattern.
+	 */
+	private function configureCdnjsAsset()
+	{
+		// Assets on CDNJS ALWAYS have versions as '0.0.0'
+		$this->setAssetVariable($source, 'version', $this->assetVersion);
+
+		// $baseUrl OR $sourcePath
+		if(self::useStatic()) {
+			$this->baseUrl = "https://cdnjs.cloudflare.com/ajax/libs/" . $this->assetName
+				. "/" . $this->assetVersion . $this->pathTail();
+			if(isset($this->assetData['static']))
+				$this->setAssetVariables($this->assetData['static']);
+		}
+		else {
+			$this->sourcePath = $this->sourcePath . $this->pathTail();
+			if(isset($this->assetData['published']))
+				$this->setAssetVariables($this->assetData['published']);
+		}
+
+		// Set any variables not already set
+		$this->setAssetVariables($this->assetData);
+	}
+
+	/*
+	 * Configures an asset described the 'vendor' pattern.
+	 */
+	private function configureVendorAsset()
+	{
+		// Set $sourcePath
+		$this->sourcePath = $this->assetData['sourcePath']
+
+		// Set variables...
+		$this->setAssetVariables($this->assetData);
+	}
+
+	// ##### ^ ##### WANT TO GET RID OF THIS ##### ^ #####
 	protected function configureAsset($assetData = [])
 	{
 		if(self::useStatic() && isset($assetData['static'])) {
@@ -195,55 +261,6 @@ class P2AssetBase extends \yii\web\AssetBundle
 		}
 
 		$this->setAssetVariables($assetData);
-	}
-
-	private function configureUnpkgAsset()
-	{
-		$this->setAssetVariable($source, 'version', $this->assetVersion);
-
-		// $baseUrl OR $sourcePath
-		if(self::useStatic()) {
-			$this->baseUrl = "https://unpkg.com/" . $this->assetName
-				. "@" . $this->assetVersion . $this->pathTail();
-		}
-		else {
-			$this->sourcePath = "@npm/" . $this->assetName . $this->pathTail();
-		}
-
-		$this->css = $this->setAssetVariable($this->css, $this->assetData, 'css');
-
-		$this->setAssetVariables($this->assetData);
-	}
-
-	private function configureCdnjsAsset()
-	{
-		$this->setAssetVariable($source, 'version', $this->assetVersion);
-
-		// $baseUrl OR $sourcePath
-		if(self::useStatic()) {
-			$this->baseUrl = "https://cdnjs.cloudflare.com/ajax/libs/" . $this->assetName
-				. "/" . $this->assetVersion . $this->pathTail();
-			if(isset($this->assetData['static'])) {
-				$this->setAssetVariables($this->assetData['static']);
-			}
-		}
-		else {
-			$this->sourcePath = $this->sourcePath . $this->pathTail();
-			if(isset($this->assetData['published'])) {
-				$this->setAssetVariables($this->assetData['published']);
-			}
-		}
-
-		$this->setAssetVariables($this->assetData);
-	}
-
-	private function configureVendorAsset()
-	{
-		// Set $sourcePath
-		$this->sourcePath = $this->assetData['sourcePath']
-
-		// Set variables...
-		$this->setAssetVariables($this->assetData);
 	}
 
 	// ##### ^ ##### UTILITY FUNCTIONS ##### ^ ##### //
