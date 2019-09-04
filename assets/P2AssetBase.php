@@ -59,12 +59,6 @@ class P2AssetBase extends \yii\web\AssetBundle
 	protected $assetVersion; // = '0.0.0'
 
 	/*
-	 * @var string
-	 * private $packagePath;
-	 */
-	protected $assetPath;
-
-	/*
 	 * @var array
 	 * protected $resourceData;
 	 */
