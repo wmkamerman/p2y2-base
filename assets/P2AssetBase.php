@@ -96,10 +96,10 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 */
 	private static $_aliasSet = false;
 
+	// ##### ^ ##### WANT TO GET RID OF THIS ##### ^ #####
 	/*
 	 * @var string
 	 * private $_p2mPath;
-	 * ##### Working to get rid of this #####
 	 */
 	private $_p2mPath;
 
@@ -232,8 +232,12 @@ class P2AssetBase extends \yii\web\AssetBundle
 		$this->setAssetVariables($this->assetData);
 	}
 
-	// ===== utility functions ===== //
+	// ##### ^ ##### UTILITY FUNCTIONS ##### ^ ##### //
 
+	/**
+	 * Sets the variable named in $key
+	 * if it is not already set & we have a value for it
+	 */
 	private function setAssetVariable($source, $key)
 	{
 		if(!isset($target) && isset($source[$key]))
@@ -241,6 +245,9 @@ class P2AssetBase extends \yii\web\AssetBundle
 		$this->$key = $this->$key;
 	}
 
+	/**
+	 * Performs setAssetVariable(...) on a block of variables
+	 */
 	private function setAssetVariables($source)
 	{
 		$this->setAssetVariable($source, 'css');
@@ -251,19 +258,16 @@ class P2AssetBase extends \yii\web\AssetBundle
 		$this->setAssetVariable($source, 'depends');
 	}
 
+	/**
+	 * Returns common ending of paths where there is one
+	 * @return string
+	 * @default ''
+	 */
 	private function pathTail()
 	{
 		if(isset($this->assetData['path']))
 			return '/' . $this->assetData['path'];
 		return '';
-	}
-
-	// ##### Want to get rid of this #####
-	private function insertAssetVersion(&$target)
-	{
-		if(isset($this->version)) {
-			$target = str_replace('##-version-##', $this->version, $target);
-		}
 	}
 
 	/**
@@ -298,6 +302,15 @@ class P2AssetBase extends \yii\web\AssetBundle
 		return $_assetsEnd;
 	}
 
+	// ##### ^ ##### WANT TO GET RID OF THIS ##### ^ #####
+	protected function insertAssetVersion(&$target)
+	{
+		if(isset($this->version)) {
+			$target = str_replace('##-version-##', $this->version, $target);
+		}
+	}
+
+	// ##### ^ ##### WANT TO GET RID OF THIS ##### ^ #####
 	protected function p2mPath()
 	{
 		if(isset($this->_p2mPath)) {
@@ -309,6 +322,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 		return $this->_p2mPath;
 	}
 
+	// ##### ^ ##### WANT TO GET RID OF THIS ##### ^ #####
 	protected function insertP2mPath(&$target)
 	{
 		$target = str_replace('@p2m@', $this->p2mPath(), $target);
