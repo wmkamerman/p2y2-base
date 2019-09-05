@@ -293,6 +293,12 @@ class P2AssetBase extends \yii\web\AssetBundle
 			$this->_version = $this->assetData['version'];
 	}
 
+	protected function insertAssetVersion(&$target)
+	{
+		if(isset($this->_version))
+			$target = str_replace('##-version-##', $this->_version, $target);
+	}
+
 	private function packageName()
 	{
 		return $this->_package;
@@ -411,14 +417,6 @@ class P2AssetBase extends \yii\web\AssetBundle
 		}
 
 		$this->setYiiVariables($assetData);
-	}
-
-	// ##### ^ ##### WANT TO GET RID OF THIS ##### ^ #####
-	protected function insertAssetVersion(&$target)
-	{
-		if(isset($this->version)) {
-			$target = str_replace('##-version-##', $this->version, $target);
-		}
 	}
 
 	// ##### ^ ##### WANT TO GET RID OF THIS ##### ^ #####
