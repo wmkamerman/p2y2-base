@@ -279,7 +279,38 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 	// ##### ^ ##### UTILITY FUNCTIONS ##### ^ ##### //
 
-	protected function setSomething()
+	protected function setP2mProjectId($projectId)
+	{
+		$this->_p2mProjectId = $projectId;
+	}
+
+	protected function getP2mProjectId()
+	{
+		return $this->_p2mProjectId;
+	}
+
+
+	protected function setSomething($something)
+	{
+	}
+
+	protected function getSomething()
+	{
+		return 'something';
+	}
+
+
+	protected function setSomething($something)
+	{
+	}
+
+	protected function getSomething()
+	{
+		return 'something';
+	}
+
+
+	protected function setSomething($something)
 	{
 	}
 
