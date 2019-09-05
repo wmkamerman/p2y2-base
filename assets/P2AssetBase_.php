@@ -42,7 +42,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 * private $_p2mProjectId;
 	 * Every P2M asset should have a project identifier.
 	 */
-	protected $p2mProjectId = 'yii2-p2y2-base';
+	protected $_p2mProjectId = 'yii2-p2y2-base';
 
 	/*
 	 * @var string
@@ -279,38 +279,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 	// ##### ^ ##### UTILITY FUNCTIONS ##### ^ ##### //
 
-	protected function setP2mProjectId($projectId)
-	{
-		$this->_p2mProjectId = $projectId;
-	}
-
-	protected function getP2mProjectId()
-	{
-		return $this->_p2mProjectId;
-	}
-
-
-	protected function setSomething($something)
-	{
-	}
-
-	protected function getSomething()
-	{
-		return 'something';
-	}
-
-
-	protected function setSomething($something)
-	{
-	}
-
-	protected function getSomething()
-	{
-		return 'something';
-	}
-
-
-	protected function setSomething($something)
+	protected function setSomething()
 	{
 	}
 
