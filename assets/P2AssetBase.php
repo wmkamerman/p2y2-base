@@ -142,7 +142,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 		 * the 2nd asset & after need different names.
 		 */
 		if(!self::$_aliasSet) {
-			Yii::setAlias('@p2m', '@vendor/p2made');
+			\Yii::setAlias('@p2m', '@vendor/p2made');
 			self::$_aliasSet = true;
 		}
 
@@ -173,7 +173,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 				$this->configureVendorAsset();
 				break;
 			default:
-				$this->configureCoreAsset();
+				$this->configureDefaultAsset();
 		}
 	}
 
@@ -182,8 +182,23 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 * This should ONLY be on assets that are part of
 	 * P2CoreAsset
 	 */
-	private function configureCoreAsset()
+	private function configureDefaultAsset()
 	{
+		$this->setAssetVersion();
+
+		// $baseUrl OR $sourcePath
+		if(self::useStatic()) {
+			$this->setAssetVariable($source, 'baseUrl');
+			if(isset($this->assetData['static']))
+				$this->setAssetVariables($this->assetData['static']);
+		}
+		else {
+			$this->setAssetVariable($source, 'sourcePath');
+			if(isset($this->assetData['published']))
+				$this->setAssetVariables($this->assetData['published']);
+		}
+
+		$this->setAssetVariables($this->assetData);
 	}
 
 	/*
@@ -250,7 +265,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 	private function configureVendorAsset()
 	{
 		// Set $sourcePath
-		$this->sourcePath = $this->assetData['sourcePath']
+		$this->sourcePath = $this->assetData['sourcePath'];
 
 		// Set variables...
 		$this->setAssetVariables($this->assetData);
