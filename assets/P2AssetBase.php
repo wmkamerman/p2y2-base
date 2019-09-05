@@ -282,23 +282,23 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 	// ##### ^ ##### UTILITY FUNCTIONS ##### ^ ##### //
 
-	protected function assetVersion()
+	private function assetVersion()
 	{
 		return $this->_version;
 	}
 
-	private function setAssetVersion()
+	protected function setAssetVersion()
 	{
 		if(!isset($this->_version))
 			$this->_version = $this->assetData['version'];
 	}
 
-	protected function packageName()
+	private function packageName()
 	{
 		return $this->_package;
 	}
 
-	private function setPackageName()
+	protected function setPackageName()
 	{
 		if(isset($this->assetData['package']))
 			$this->_package = $this->assetData['package'];
