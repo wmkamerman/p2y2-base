@@ -53,25 +53,18 @@ class P2AssetBase extends \yii\web\AssetBundle
 	protected $assetName;
 
 	/*
-	 * @var string
-	 * protected $version;
-	 */
-	protected $assetVersion; // = '0.0.0'
-
-	/*
 	 * @var array
 	 * protected $assetData;
 	 */
 	protected $assetData = [];
 
-	/*
-	 * @var array
-	 * protected $resourceData;
-	 * ##### Deprecated in favour of $assetData #####
-	 */
-	protected $resourceData = [];
-
 // ##### ^ ##### ^ Private Variables ^ ##### ^ #####
+
+	/*
+	 * @var string
+	 * private $_version;
+	 */
+	private $_version; // = '0.0.0'
 
 	/*
 	 * @var string
@@ -79,7 +72,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 * The simple name of the package that the asset is built on
 	 * Usually the same as $assetName
 	 */
-	private $_packageName;
+	private $_package;
 
 	/*
 	 * @var boolean
@@ -98,6 +91,19 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 * private $_assetsEnd = false;
 	 */
 	private static $_aliasSet = false;
+
+	/*
+	 * ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ #####
+	 * ##### ^ #####   WANT TO GET RID OF...   ##### ^ #####
+	 * ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ #####
+	 */
+
+	// ##### ^ ##### WANT TO GET RID OF THIS ##### ^ #####
+	/*
+	 * @var array
+	 * protected $resourceData;
+	 */
+	protected $resourceData = [];
 
 	// ##### ^ ##### WANT TO GET RID OF THIS ##### ^ #####
 	/*
@@ -159,10 +165,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 		 * For those we include the package name as...
 		 * 'package' => 'packageName' & swap it in here.
 		 */
-		if(isset($this->assetData['package']))
-			$this->_packageName = $this->assetData['package'];
-		else
-			$this->_packageName = $this->assetName;
+		$this->setPackageName();
 
 		// Which pattern does the data use?
 		switch ($this->assetData['pattern']) {
@@ -227,8 +230,8 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 		// $baseUrl OR $sourcePath
 		if(self::useStatic()) {
-			$this->baseUrl = "https://cdnjs.cloudflare.com/ajax/libs/" . $this->_packageName
-				. "/" . $this->assetVersion . $this->pathTail();
+			$this->baseUrl = "https://cdnjs.cloudflare.com/ajax/libs/" . $this->packageName()
+				. "/" . $this->assetVersion() . $this->pathTail();
 			if(isset($this->assetData['static']))
 				$this->setYiiVariables($this->assetData['static']);
 		}
@@ -253,15 +256,15 @@ class P2AssetBase extends \yii\web\AssetBundle
 	/*
 	 * Sets $baseUrl or $sourcePath for 'unpkg' assets
 	 */
-	protected function setUnpkgPath()
+	private function setUnpkgPath()
 	{
 		// $baseUrl OR $sourcePath
 		if(self::useStatic()) {
-			$this->baseUrl = "https://unpkg.com/" . $this->_packageName
-				. "@" . $this->assetVersion . $this->pathTail();
+			$this->baseUrl = "https://unpkg.com/" . $this->packageName()
+				. "@" . $this->assetVersion() . $this->pathTail();
 		}
 		else {
-			$this->sourcePath = "@npm/" . $this->_packageName . $this->pathTail();
+			$this->sourcePath = "@npm/" . $this->packageName() . $this->pathTail();
 		}
 	}
 
@@ -279,10 +282,29 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 	// ##### ^ ##### UTILITY FUNCTIONS ##### ^ ##### //
 
+	protected function assetVersion()
+	{
+		return $this->_version;
+	}
+
 	private function setAssetVersion()
 	{
-		if(!isset($this->assetVersion))
-			$this->assetVersion = $this->assetData['version'];
+		if(!isset($this->_version))
+			$this->_version = $this->assetData['version'];
+	}
+
+	protected function packageName()
+	{
+		return $this->_package;
+	}
+
+	private function setPackageName()
+	{
+		if(isset($this->assetData['package']))
+			$this->_package = $this->assetData['package'];
+		else
+			$this->_package = $this->assetName;
+		//$_packageName;
 	}
 
 	/**
