@@ -254,6 +254,18 @@ class P2AssetBase extends \yii\web\AssetBundle
 	}
 
 	/*
+	 * Configures an asset described the 'vendor' pattern.
+	 */
+	protected function configureVendorAsset()
+	{
+		// Set $sourcePath
+		$this->sourcePath = $this->assetData['sourcePath'];
+
+		// Set variables...
+		$this->setYiiVariables($this->assetData);
+	}
+
+	/*
 	 * Sets $baseUrl or $sourcePath for 'unpkg' assets
 	 */
 	private function setUnpkgPath()
@@ -266,18 +278,6 @@ class P2AssetBase extends \yii\web\AssetBundle
 		else {
 			$this->sourcePath = "@npm/" . $this->packageName() . $this->pathTail();
 		}
-	}
-
-	/*
-	 * Configures an asset described the 'vendor' pattern.
-	 */
-	protected function configureVendorAsset()
-	{
-		// Set $sourcePath
-		$this->sourcePath = $this->assetData['sourcePath'];
-
-		// Set variables...
-		$this->setYiiVariables($this->assetData);
 	}
 
 	// ##### ^ ##### UTILITY FUNCTIONS ##### ^ ##### //
