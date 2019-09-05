@@ -134,17 +134,23 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 * public $depends = [];
 	 */
 
-	public function __construct()
+	protected function __construct($bypass = false)
 	{
 		/*
 		 * For easier access to p2m stuff we give it an alias
 		 * but only if it hasn't already been set.
 		 * the 2nd asset & after need different names.
 		 */
-		if(!self::$_aliasSet) {
-			\Yii::setAlias('@p2m', '@vendor/p2made');
-			self::$_aliasSet = true;
-		}
+		self::setP2mAlias();
+
+		if($bypass) return;
+
+		//$bypass = true;
+		//parent::__construct($bypass);
+
+
+
+		// now get on with stuff...
 
 		/*
 		 * Usually $assetName is also the name of the package.
@@ -182,7 +188,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 * This should ONLY be on assets that are part of
 	 * P2CoreAsset
 	 */
-	private function configureDefaultAsset()
+	protected function configureDefaultAsset()
 	{
 		$this->setAssetVersion();
 
@@ -204,7 +210,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 	/*
 	 * Configures an asset described the 'unpkg' pattern.
 	 */
-	private function configureUnpkgAsset()
+	protected function configureUnpkgAsset()
 	{
 		$this->setAssetVersion();
 		$this->setUnpkgPath();
@@ -214,7 +220,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 	/*
 	 * Configures an asset described the 'cdnjs' pattern.
 	 */
-	private function configureCdnjsAsset()
+	protected function configureCdnjsAsset()
 	{
 		// Assets on CDNJS ALWAYS have versions as '0.0.0'
 		$this->setAssetVersion();
@@ -222,12 +228,12 @@ class P2AssetBase extends \yii\web\AssetBundle
 		// $baseUrl OR $sourcePath
 		if(self::useStatic()) {
 			$this->baseUrl = "https://cdnjs.cloudflare.com/ajax/libs/" . $this->_packageName
-				. "/" . $this->assetVersion . $this->tail();
+				. "/" . $this->assetVersion . $this->pathTail();
 			if(isset($this->assetData['static']))
 				$this->setAssetVariables($this->assetData['static']);
 		}
 		else {
-			$this->sourcePath = $this->sourcePath . $this->tail();
+			$this->sourcePath = $this->sourcePath . $this->pathTail();
 			if(isset($this->assetData['published']))
 				$this->setAssetVariables($this->assetData['published']);
 		}
@@ -239,7 +245,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 	/*
 	 * Configures an asset described the 'moment' pattern.
 	 */
-	private function configureMomentAsset()
+	protected function configureMomentAsset()
 	{
 		$this->setUnpkgPath();
 	}
@@ -247,55 +253,28 @@ class P2AssetBase extends \yii\web\AssetBundle
 	/*
 	 * Sets $baseUrl or $sourcePath for 'unpkg' assets
 	 */
-	private function setUnpkgPath()
+	protected function setUnpkgPath()
 	{
 		// $baseUrl OR $sourcePath
 		if(self::useStatic()) {
 			$this->baseUrl = "https://unpkg.com/" . $this->_packageName
-				. "@" . $this->assetVersion . $this->tail();
+				. "@" . $this->assetVersion . $this->pathTail();
 		}
 		else {
-			$this->sourcePath = "@npm/" . $this->_packageName . $this->tail();
+			$this->sourcePath = "@npm/" . $this->_packageName . $this->pathTail();
 		}
 	}
 
 	/*
 	 * Configures an asset described the 'vendor' pattern.
 	 */
-	private function configureVendorAsset()
+	protected function configureVendorAsset()
 	{
 		// Set $sourcePath
 		$this->sourcePath = $this->assetData['sourcePath'];
 
 		// Set variables...
 		$this->setAssetVariables($this->assetData);
-	}
-
-	// ##### ^ ##### WANT TO GET RID OF THIS ##### ^ #####
-	protected function configureAsset($assetData = [])
-	{
-		if(self::useStatic() && isset($assetData['static'])) {
-			$tempData = $assetData['static'];
-
-			if(isset($tempData['baseUrl'])) {
-				$this->baseUrl = $this->insertAssetVersion($tempData['baseUrl']);
-			}
-
-			$this->setAssetVariables($assetData);
-		}
-		elseif(isset($assetData['published'])) {
-			$tempData = $assetData['published'];
-
-			if(isset($tempData['sourcePath'])) {
-				$this->sourcePath = $this->insertAssetVersion($tempData['sourcePath']);
-
-				$this->insertP2mPath($this->sourcePath);
-			}
-
-			$this->setAssetVariables($assetData);
-		}
-
-		$this->setAssetVariables($assetData);
 	}
 
 	// ##### ^ ##### UTILITY FUNCTIONS ##### ^ ##### //
@@ -335,7 +314,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 * @return string
 	 * @default ''
 	 */
-	private function tail()
+	private function pathTail()
 	{
 		if(isset($this->assetData['path']))
 			return '/' . $this->assetData['path'];
@@ -347,14 +326,23 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 * @return boolean
 	 * @default false
 	 */
+	private static function setP2mAlias()
+	{
+		if(!self::$_aliasSet)
+			return;
+		\Yii::setAlias('@p2m', '@vendor/p2made');
+		self::$_aliasSet = true;
+	}
+
+	/**
+	 * Get useStatic setting - use static resources
+	 * @return boolean
+	 * @default false
+	 */
 	private static function useStatic()
 	{
-		if(isset(self::$_useStatic)) {
-			return self::$_useStatic;
-		}
-
-		self::$_useStatic = P2AssetsSettings::assetsUseStatic();
-
+		if(!isset(self::$_useStatic))
+			self::$_useStatic = P2AssetsSettings::assetsUseStatic();
 		return self::$_useStatic;
 	}
 
@@ -365,13 +353,42 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 */
 	private static function assetsEnd()
 	{
-		if(isset($_assetsEnd)) {
-			return $_assetsEnd;
+		if(!isset(self::$_assetsEnd))
+			self::$_assetsEnd = P2AssetsSettings::assetsStaticEnd();
+		return self::$_assetsEnd;
+	}
+
+	/*
+	 * ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ #####
+	 * ##### ^ #####   WANT TO GET RID OF...   ##### ^ #####
+	 * ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ #####
+	 */
+
+	// ##### ^ ##### WANT TO GET RID OF THIS ##### ^ #####
+	protected function configureAsset($assetData = [])
+	{
+		if(self::useStatic() && isset($assetData['static'])) {
+			$tempData = $assetData['static'];
+
+			if(isset($tempData['baseUrl'])) {
+				$this->baseUrl = $this->insertAssetVersion($tempData['baseUrl']);
+			}
+
+			$this->setAssetVariables($assetData);
+		}
+		elseif(isset($assetData['published'])) {
+			$tempData = $assetData['published'];
+
+			if(isset($tempData['sourcePath'])) {
+				$this->sourcePath = $this->insertAssetVersion($tempData['sourcePath']);
+
+				$this->insertP2mPath($this->sourcePath);
+			}
+
+			$this->setAssetVariables($assetData);
 		}
 
-		$_assetsEnd = P2AssetsSettings::assetsStaticEnd();
-
-		return $_assetsEnd;
+		$this->setAssetVariables($assetData);
 	}
 
 	// ##### ^ ##### WANT TO GET RID OF THIS ##### ^ #####
