@@ -147,14 +147,12 @@ class P2AssetBase extends \yii\web\AssetBundle
 		 * but only if it hasn't already been set.
 		 * the 2nd asset & after need different names.
 		 */
-		self::setP2mAlias();
+		//self::setP2mAlias();
 
 		if($bypass) return;
 
 		//$bypass = true;
 		//parent::__construct($bypass);
-
-
 
 		// now get on with stuff...
 
@@ -282,7 +280,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 	// ##### ^ ##### UTILITY FUNCTIONS ##### ^ ##### //
 
-	private function assetVersion()
+	protected function assetVersion()
 	{
 		return $this->_version;
 	}
@@ -299,18 +297,22 @@ class P2AssetBase extends \yii\web\AssetBundle
 			$target = str_replace('##-version-##', $this->_version, $target);
 	}
 
-	private function packageName()
+	protected function packageName()
 	{
 		return $this->_package;
 	}
 
-	protected function setPackageName()
+	protected function setPackageName($packageName = null)
 	{
+		if(isset($packageName)) {
+			$this->_package = $packageName;
+			return;
+		}
+
 		if(isset($this->assetData['package']))
 			$this->_package = $this->assetData['package'];
 		else
 			$this->_package = $this->assetName;
-		//$_packageName;
 	}
 
 	/**
