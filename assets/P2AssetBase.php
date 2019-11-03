@@ -36,43 +36,31 @@ use p2m\base\helpers\P2AssetsSettings;
 class P2AssetBase extends \yii\web\AssetBundle
 {
 // ##### ^ ##### ^ P2M Asset Variables ^ ##### ^ #####
-
 	/*
 	 * @var string
 	 * private $_p2mProjectId;
-	 * Every P2M asset should have a project identifier.
 	 */
-	protected $p2mProjectId = 'yii2-p2y2-base';
+	protected $_p2mProjectId = 'yii2-p2y2-base';
 
 	/*
 	 * @var string
 	 * protected $assetName;
-	 * The simple name of the asset.
-	 * Usually the same as $_packageName
 	 */
 	protected $assetName;
 
 	/*
-	 * @var array
-	 * protected $assetData;
+	 * @var string
+	 * protected $version;
 	 */
-	protected $assetData = [];
+	protected $version; // = '0.0.0'
+
+	/*
+	 * @var array
+	 * protected $resourceData;
+	 */
+	protected $resourceData = [];
 
 // ##### ^ ##### ^ Private Variables ^ ##### ^ #####
-
-	/*
-	 * @var string
-	 * private $_version;
-	 */
-	private $_version; // = '0.0.0'
-
-	/*
-	 * @var string
-	 * protected $_packageName;
-	 * The simple name of the package that the asset is built on
-	 * Usually the same as $assetName
-	 */
-	private $_package;
 
 	/*
 	 * @var boolean
@@ -93,17 +81,25 @@ class P2AssetBase extends \yii\web\AssetBundle
 	private static $_aliasSet = false;
 
 	/*
+	 * @var string
+	 * private $_version;
+	 */
+	private $_version; // = '0.0.0'
+
+	/*
+	 * @var string
+	 * protected $_packageName;
+	 * The simple name of the package that the asset is built on
+	 * Usually the same as $assetName
+	 */
+	private $_package;
+
+
+	/*
 	 * ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ #####
 	 * ##### ^ #####   WANT TO GET RID OF...   ##### ^ #####
 	 * ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ #####
 	 */
-
-	// ##### ^ ##### WANT TO GET RID OF THIS ##### ^ #####
-	/*
-	 * @var array
-	 * protected $resourceData;
-	 */
-	protected $resourceData = [];
 
 	// ##### ^ ##### WANT TO GET RID OF THIS ##### ^ #####
 	/*
@@ -140,6 +136,61 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 * public $depends = [];
 	 */
 
+	/*
+	 * P2 asset data structure
+	 *
+
+	protected $resourceData = [
+		'static' => [
+			'baseUrl' => 'baseUrl',
+			'css' => [
+				'css/cssfile.css',
+			],
+			'cssOptions' => [ // iff there are static specific cssOptions
+				'integrity' => 'static-hash', // iff css has hash[s]
+				'crossorigin' => 'anonymous', // iff css has hash[s]
+			],
+			'js' => [
+				'js/jsfile.js',
+			],
+			'jsOptions' => [ // iff there are static specific jsOptions
+				'integrity' => 'static-hash', // iff js has hash[s]
+				'crossorigin' => 'anonymous', // iff js has hash[s]
+			],
+			'depends' => [ // iff there are static specific depends
+			],
+			'publishOptions' => [ // iff there are static specific publishOptions
+			],
+		],
+		'published' => [
+			'sourcePath' => 'sourcePath',
+			'css' => [
+				'css/cssfile.css',
+			],
+			'cssOptions' => [ // iff there are static specific cssOptions
+				'integrity' => 'static-hash', // iff css has hash[s]
+				'crossorigin' => 'anonymous', // iff css has hash[s]
+			],
+			'js' => [
+				'js/jsfile.js',
+			],
+			'jsOptions' => [ // iff there are static specific jsOptions
+				'integrity' => 'static-hash', // iff js has hash[s]
+				'crossorigin' => 'anonymous', // iff js has hash[s]
+			],
+			'depends' => [ // iff there are static specific depends
+			],
+			'publishOptions' => [ // iff there are static specific publishOptions
+			],
+		],
+		'depends' => [
+			'some\useful\ThingAsset',
+		],
+	];
+
+	 *
+	 */
+
 	protected function __construct($bypass = false, $config = [])
 	{
 		/*
@@ -151,9 +202,154 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 		if($bypass) return;
 
+		if(!self::$_aliasSet) {
+			Yii::setAlias('@p2m', '@vendor/p2made');
+			self::$_aliasSet = true;
+		}
+
 
 		parent::__construct();
 	}
+
+
+
+
+
+
+	protected function configureAsset($assetData)
+	{
+		$this->configureAssetOptions($assetData);
+
+		if(self::useStatic() && isset($assetData['static'])) {
+			//$this->configureStaticAsset($assetData['static']);
+			$assetData = $assetData['static'];
+
+			if(isset($assetData['baseUrl'])) {
+				$this->baseUrl = $assetData['baseUrl'];
+				$this->insertAssetVersion($this->baseUrl);
+			}
+		}
+		elseif(isset($assetData['published'])) {
+			//$this->configurePublishedAsset($assetData['published']);
+			$assetData = $assetData['published'];
+
+			if(isset($assetData['sourcePath'])) {
+				$this->sourcePath = $assetData['sourcePath'];
+				$this->insertAssetVersion($this->sourcePath);
+				$this->insertP2mPath($this->sourcePath);
+			}
+		}
+
+		if(isset($assetData['css'])) {
+			$this->css = $assetData['css'];
+		}
+		if(isset($assetData['js'])) {
+			$this->js = $assetData['js'];
+		}
+
+		$this->configureAssetOptions($assetData);
+	}
+
+	protected function configureAssetOptions($assetData)
+	{
+		if(isset($assetData['cssOptions'])) {
+			$this->cssOptions = $assetData['cssOptions'];
+		}
+		if(isset($assetData['jsOptions'])) {
+			$this->jsOptions = $assetData['jsOptions'];
+		}
+		if(isset($assetData['depends'])) {
+			$this->depends = $assetData['depends'];
+		}
+		if(isset($assetData['publishOptions'])) {
+			$this->publishOptions = $assetData['publishOptions'];
+		}
+	}
+
+	// ===== utility functions ===== //
+
+	protected function p2mPath()
+	{
+		if(isset($this->_p2mPath)) {
+			return $this->_p2mPath;
+		}
+
+		$this->_p2mPath = '@vendor/p2made/' . $this->_p2mProjectId . '/vendor';
+
+		return $this->_p2mPath;
+	}
+
+	protected function insertP2mPath(&$target)
+	{
+		$target = str_replace('@p2m@', $this->p2mPath(), $target);
+	}
+
+	protected function insertAssetVersion(&$target)
+	{
+		if(isset($this->version)) {
+			$target = str_replace('##-version-##', $this->version, $target);
+		}
+	}
+
+	/**
+	 * Get useStatic setting - use static resources
+	 * @return boolean
+	 * @default false
+	 */
+	protected static function useStatic()
+	{
+		if(isset(self::$_useStatic)) {
+			return self::$_useStatic;
+		}
+
+		self::$_useStatic = AssetsSettings::assetsUseStatic();
+
+		return self::$_useStatic;
+	}
+
+	/**
+	 * Get assetsEnd setting - static application end
+	 * @return array | false
+	 * @default false
+	 */
+	protected static function assetsEnd()
+	{
+		if(isset($_assetsEnd)) {
+			return $_assetsEnd;
+		}
+
+		$_assetsEnd = AssetsSettings::assetsassetsEnd();
+
+		return $_assetsEnd;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	/*
 	 * Configures an asset not described by a pattern.
@@ -265,7 +461,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 	protected function insertAssetVersion(&$target)
 	{
 		if(isset($this->_version))
-			$target = str_replace('##-version-##', $this->_version, $target);
+			$target = str_replace('@@version@@', $this->_version, $target);
 	}
 
 	protected function packageName()
@@ -320,19 +516,6 @@ class P2AssetBase extends \yii\web\AssetBundle
 		if(isset($this->assetData['path']))
 			return '/' . $this->assetData['path'];
 		return '';
-	}
-
-	/**
-	 * Get useStatic setting - use static resources
-	 * @return boolean
-	 * @default false
-	 */
-	private static function setP2mAlias()
-	{
-		if(!self::$_aliasSet)
-			return;
-		\Yii::setAlias('@p2m', '@vendor/p2made');
-		self::$_aliasSet = true;
 	}
 
 	/**
