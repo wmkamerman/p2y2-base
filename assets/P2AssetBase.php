@@ -2,8 +2,8 @@
 /**
  * P2AssetBase.php
  *
- * @copyright Copyright &copy; Pedro Plowman, 2017
  * @author Pedro Plowman
+ * @copyright Copyright &copy; Pedro Plowman, 2019
  * @link https://github.com/p2made
  * @license MIT
  *
@@ -140,7 +140,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 * public $depends = [];
 	 */
 
-	protected function __construct($bypass = false)
+	protected function __construct($bypass = false, $config = [])
 	{
 		/*
 		 * For easier access to p2m stuff we give it an alias
@@ -151,37 +151,8 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 		if($bypass) return;
 
-		//$bypass = true;
-		//parent::__construct($bypass);
 
-		// now get on with stuff...
-
-		/*
-		 * Usually $assetName is also the name of the package.
-		 * When more than one asset uses the same package
-		 * the 2nd asset & after need different names.
-		 * For those we include the package name as...
-		 * 'package' => 'packageName' & swap it in here.
-		 */
-		$this->setPackageName();
-
-		// Which pattern does the data use?
-		switch ($this->assetData['pattern']) {
-			case 'unpkg';
-				$this->configureUnpkgAsset();
-				break;
-			case 'cdnjs';
-				$this->configureCdnjsAsset();
-				break;
-			case 'moment';
-				$this->configureMomentAsset();
-				break;
-			case 'vendor';
-				$this->configureVendorAsset();
-				break;
-			default:
-				$this->configureDefaultAsset();
-		}
+		parent::__construct();
 	}
 
 	/*
