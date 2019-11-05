@@ -29,27 +29,47 @@
  *     'p2m\assets\base\P2AssetBase',
  */
 
-// ##### ^ ##### ^ P2 asset data structure ^ ##### ^ #####
+namespace p2m\base\assets;
 
-/*
- *
+use p2m\base\helpers\P2AssetsSettings as Settings;
 
- *
- */
+class P2AssetBase extends \yii\web\AssetBundle
+{
+	// ##### ^ ##### ^ P2M Asset Properties ^ ##### ^ #####
+
+	/*
+	 * @var string
+	 * private $_p2mProjectId;
+	 */
+	protected $_p2mProjectId = 'yii2-p2y2-base';
+
+	/*
+	 * @var string
+	 * protected $packageName;
+	 * The simple name of the package that the asset is built on
+	 */
+	protected $packageName;
+
+	/*
+	 * @var string
+	 * protected $packageVersion;
+	 */
+	protected $packageVersion; // = '0.0.0'
+
+	/*
+	 * @var array
+	 * protected $packageData;
+	 */
+	protected $packageData = [];
+
+	// ##### ^ ##### ^ P2 asset data structure ^ ##### ^ #####
+
+	/*
+	 *
 
 	protected $packageData = [
-			'baseUrl' => 'baseUrl',
-			'sourcePath' => 'sourcePath',
-			'css' => [
-				'css/cssfile.css',
-			],
-			'cssOptions' => [
-			],
-			'js' => [
-				'js/jsfile.js',
-			],
-			'jsOptions' => [
-			],
+		'baseUrl' => 'baseUrl',
+		'sourcePath' => 'sourcePath',
 		'static' => [
 			'css' => [
 				'css/cssfile.css',
@@ -92,75 +112,27 @@
 			'publishOptions' => [
 			],
 		],
-			'publishOptions' => [
-			],
+		'css' => [
+			'css/cssfile.css',
+		],
+		'cssOptions' => [
+		],
+		'js' => [
+			'js/jsfile.js',
+		],
+		'jsOptions' => [
+		],
+		'publishOptions' => [
+		],
 		'depends' => [
 			'some\useful\ThingAsset',
 		],
 	];
 
-
-	protected $packageData = [
-		'baseUrl' => 'https://cdn.jsdelivr.net/npm/bootstrap@##-version-##/dist',
-		'sourcePath' => '@npm/bootstrap/dist',
-		'css' => [
-			'css/bootstrap.min.css',
-		],
-		'js' => [
-			'js/bootstrap.min.js',
-		],
-		'static' => [
-			'cssOptions' => [
-				'integrity' => 'sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T',
-				'crossorigin' => 'anonymous',
-			],
-			'jsOptions' => [
-				'integrity' => 'sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM',
-				'crossorigin' => 'anonymous',
-			],
-		],
-		'depends' => [
-			'p2m\assets\base\P2YiiAsset',
-		],
-	];
-
-
-
-
-
-namespace p2m\base\assets;
-
-use p2m\base\helpers\P2AssetsSettings as Settings;
-
-class P2AssetBase extends \yii\web\AssetBundle
-{
-// ##### ^ ##### ^ P2M Asset Variables ^ ##### ^ #####
-	/*
-	 * @var string
-	 * private $_p2mProjectId;
+	 *
 	 */
-	protected $_p2mProjectId = 'yii2-p2y2-base';
 
-	/*
-	 * @var string
-	 * protected $packageName;
-	 * The simple name of the package that the asset is built on
-	 */
-	protected $packageName;
-
-	/*
-	 * @var string
-	 * protected $packageVersion;
-	 */
-	protected $packageVersion; // = '0.0.0'
-
-	/*
-	 * @var array
-	 * protected $packageData;
-	 */
-	protected $packageData = [];
-
-// ##### ^ ##### ^ Private Variables ^ ##### ^ #####
+	// ##### ^ ##### ^ Private Properties ^ ##### ^ #####
 
 	/*
 	 * @var boolean
@@ -186,7 +158,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 */
 	private $_version; // = '0.0.0'
 
-// ##### ^ ##### ^ Yii Asset Variables ^ ##### ^ #####
+	// ##### ^ ##### ^ Yii Asset VariaPropertiesles ^ ##### ^ #####
 
 	/**
 	 * @var string
@@ -214,21 +186,14 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 * public $depends = [];
 	 */
 
-	/*
-	protected function __construct($bypass = false, $config = [])
+	protected function configureAsset($data)
 	{
+		$insertVersion = function($source) {
+			if(isset($this->packageVersion))
+				return str_replace('##-version-##', $this->packageVersion, $source);
+			return $source;
+		};
 
-		if($bypass) return;
-
-		$data = $this->packageData;
-
-
-		parent::__construct();
-	}
-	*/
-
-	protected function configureAsset($assetData)
-	{
 		/*
 		 * For easier access to p2m stuff we give it an alias
 		 * but only if it hasn't already been set.
@@ -242,48 +207,34 @@ class P2AssetBase extends \yii\web\AssetBundle
 			self::$_aliasSet = true;
 		}
 
-		$this->configureAssetOptions($data);
-
-		if(self::useStatic() && isset($data['static'])) {
-			if(isset($data['baseUrl'])) {
-				$this->baseUrl = $data['baseUrl'];
-				$this->insertAssetVersion($this->baseUrl);
-			}
+		if(self::useStatic()) {
+			$branch = 'static';
+			if(isset($data['baseUrl']))
+				$this->baseUrl = $insertVersion($data['baseUrl']);
 		}
-		elseif(isset($data['published'])) {
-			if(isset($data['sourcePath'])) {
-				$this->sourcePath = $data['sourcePath'];
-				$this->insertAssetVersion($this->sourcePath);
-			}
+		else {
+			$branch = 'published';
+			if(isset($data['sourcePath']))
+				$this->sourcePath = $insertVersion($data['sourcePath']);
 		}
 
-		if(isset($data['css']))
-			$this->css = $assedataData['css'];
-		if(isset($data['js']))
-			$this->js = $data['js'];
+		if(isset($data[$branch])) {
+			$branchData = $data[$branch];
+			$dataTemp = $data;
+			$data = array_merge($dataTemp, $branchData);
+		}
 
-		$this->configureAssetOptions($data);
-	}
+		$yiiAttributes = [
+			'css', 'cssOptions', 'js', 'jsOptions', 'publishOptions', 'depends'
+		];
 
-	protected function configureAssetOptions($data)
-	{
-		if(isset($data['cssOptions']))
-			$this->cssOptions = $data['cssOptions'];
-		if(isset($data['jsOptions']))
-			$this->jsOptions = $data['jsOptions'];
-		if(isset($data['publishOptions']))
-			$this->publishOptions = $data['publishOptions'];
-		if(isset($data['depends']))
-			$this->depends = $data['depends'];
+		foreach($yiiAttributes as $attribute) {
+			if(isset($data[$attribute]))
+				$this->{$attribute} = $data[$attribute];
+		}
 	}
 
 	// ===== utility functions ===== //
-
-	protected function insertAssetVersion(&$target)
-	{
-		if(isset($this->version))
-			$target = str_replace('##-version-##', $this->version, $target);
-	}
 
 	/**
 	 * Get useStatic setting - use static resources
@@ -315,3 +266,16 @@ class P2AssetBase extends \yii\web\AssetBundle
 		return $_assetsEnd;
 	}
 }
+
+	/*
+	protected function __construct($bypass = false, $config = [])
+	{
+
+		if($bypass) return;
+
+		$data = $this->packageData;
+
+
+		parent::__construct();
+	}
+	*/
