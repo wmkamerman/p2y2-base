@@ -61,9 +61,8 @@ class P2AssetsSettings extends P2Settings
 	 */
 	public static function assetsSettings()
 	{
-		if(isset(self::$_assetsSettings)) {
+		if(isset(self::$_assetsSettings))
 			return self::$_assetsSettings;
-		}
 
 		return self::getSettingsBlock(self::BLOCK_NAME);
 	}
@@ -75,9 +74,8 @@ class P2AssetsSettings extends P2Settings
 	 */
 	public static function assetsUseStatic()
 	{
-		if(isset(self::$_useStatic)) {
+		if(isset(self::$_useStatic))
 			return self::$_useStatic;
-		}
 
 		return self::getSettingsItem(
 			self::$_useStatic,
@@ -94,9 +92,8 @@ class P2AssetsSettings extends P2Settings
 	 */
 	public static function assetsStaticEnd()
 	{
-		if(isset(self::$_staticEnd)) {
+		if(isset(self::$_staticEnd))
 			return self::$_staticEnd;
-		}
 
 		return self::getSettingsItem(
 			self::$_staticEnd,

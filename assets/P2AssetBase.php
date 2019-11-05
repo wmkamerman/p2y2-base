@@ -89,7 +89,7 @@
 
 namespace p2m\base\assets;
 
-use p2m\base\helpers\P2AssetsSettings;
+use p2m\base\helpers\P2AssetsSettings as Settings;
 
 class P2AssetBase extends \yii\web\AssetBundle
 {
@@ -285,7 +285,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 			return self::$_useStatic;
 		}
 
-		self::$_useStatic = AssetsSettings::assetsUseStatic();
+		self::$_useStatic = Settings::assetsUseStatic();
 
 		return self::$_useStatic;
 	}
@@ -301,7 +301,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 			return $_assetsEnd;
 		}
 
-		$_assetsEnd = AssetsSettings::assetsassetsEnd();
+		$_assetsEnd = Settings::assetsassetsEnd();
 
 		return $_assetsEnd;
 	}
@@ -509,7 +509,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 	private static function useStatic()
 	{
 		if(!isset(self::$_useStatic))
-			self::$_useStatic = P2AssetsSettings::assetsUseStatic();
+			self::$_useStatic = Settings::assetsUseStatic();
 		return self::$_useStatic;
 	}
 
@@ -521,7 +521,7 @@ class P2AssetBase extends \yii\web\AssetBundle
 	private static function assetsEnd()
 	{
 		if(!isset(self::$_assetsEnd))
-			self::$_assetsEnd = P2AssetsSettings::assetsStaticEnd();
+			self::$_assetsEnd = Settings::assetsStaticEnd();
 		return self::$_assetsEnd;
 	}
 

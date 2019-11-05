@@ -34,9 +34,8 @@ class P2Settings
 	 */
 	protected static function p2mSettings()
 	{
-		if(isset(self::$_p2mSettings)) {
+		if(isset(self::$_p2mSettings))
 			return self::$_p2mSettings;
-		}
 
 		return self::getSettingsItem(self::$_p2mSettings, Yii::$app->params, 'p2m');
 	}
@@ -58,8 +57,8 @@ class P2Settings
 
 	/**
 	 * Get settings item
-	 * @param array | false $source
 	 * @param object &$target
+	 * @param array | false $source
 	 * @param string $name
 	 * @param object $default
 	 * @return object | false
@@ -71,9 +70,8 @@ class P2Settings
 		 * if $target is already set,
 		 * return it unchanged
 		 */
-		if(isset($target)) {
+		if(isset($target))
 			return $target;
-		}
 
 		$useSource = true;
 
