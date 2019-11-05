@@ -195,13 +195,6 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 		$this->configureAssetOptions($data);
 
-		$this->configureAssetOptions($data);
-
-		parent::__construct();
-	}
-
-	protected function configureAsset($data)
-	{
 		if(self::useStatic() && isset($data['static'])) {
 			if(isset($data['baseUrl'])) {
 				$this->baseUrl = $data['baseUrl'];
@@ -219,6 +212,14 @@ class P2AssetBase extends \yii\web\AssetBundle
 			$this->css = $assedataData['css'];
 		if(isset($data['js']))
 			$this->js = $data['js'];
+
+		$this->configureAssetOptions($data);
+
+		parent::__construct();
+	}
+
+	protected function configureAssetOptions($assetData)
+	{
 		if(isset($data['cssOptions']))
 			$this->cssOptions = $assedataData['cssOptions'];
 		if(isset($data['jsOptions']))
@@ -227,61 +228,6 @@ class P2AssetBase extends \yii\web\AssetBundle
 			$this->publishOptions = $assedataData['publishOptions'];
 		if(isset($data['depends']))
 			$this->depends = $assedataData['depends'];
-
-	}
-
-
-
-
-
-	protected function configureAsset($assetData)
-	{
-		$this->configureAssetOptions($assetData);
-
-		if(self::useStatic() && isset($assetData['static'])) {
-			//$this->configureStaticAsset($assetData['static']);
-			$assetData = $assetData['static'];
-
-			if(isset($assetData['baseUrl'])) {
-				$this->baseUrl = $assetData['baseUrl'];
-				$this->insertAssetVersion($this->baseUrl);
-			}
-		}
-		elseif(isset($assetData['published'])) {
-			//$this->configurePublishedAsset($assetData['published']);
-			$assetData = $assetData['published'];
-
-			if(isset($assetData['sourcePath'])) {
-				$this->sourcePath = $assetData['sourcePath'];
-				$this->insertAssetVersion($this->sourcePath);
-				$this->insertP2mPath($this->sourcePath);
-			}
-		}
-
-		if(isset($assetData['css'])) {
-			$this->css = $assetData['css'];
-		}
-		if(isset($assetData['js'])) {
-			$this->js = $assetData['js'];
-		}
-
-		$this->configureAssetOptions($assetData);
-	}
-
-	protected function configureAssetOptions($assetData)
-	{
-		if(isset($assetData['cssOptions'])) {
-			$this->cssOptions = $assetData['cssOptions'];
-		}
-		if(isset($assetData['jsOptions'])) {
-			$this->jsOptions = $assetData['jsOptions'];
-		}
-		if(isset($assetData['depends'])) {
-			$this->depends = $assetData['depends'];
-		}
-		if(isset($assetData['publishOptions'])) {
-			$this->publishOptions = $assetData['publishOptions'];
-		}
 	}
 
 	// ===== utility functions ===== //
@@ -324,125 +270,6 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	/*
-	 * Configures an asset not described by a pattern.
-	 * This should ONLY be on assets that are part of
-	 * P2CoreAsset
-	 */
-	protected function configureDefaultAsset()
-	{
-		$this->setAssetVersion();
-
-		// $baseUrl OR $sourcePath
-		if(self::useStatic()) {
-			$this->setYiiVariable($source, 'baseUrl');
-			if(isset($this->assetData['static']))
-				$this->setYiiVariables($this->assetData['static']);
-		}
-		else {
-			$this->setYiiVariable($source, 'sourcePath');
-			if(isset($this->assetData['published']))
-				$this->setYiiVariables($this->assetData['published']);
-		}
-
-		$this->setYiiVariables($this->assetData);
-	}
-
-	/*
-	 * Configures an asset described the 'unpkg' pattern.
-	 */
-	protected function configureUnpkgAsset()
-	{
-		$this->setAssetVersion();
-		$this->setUnpkgPath();
-		$this->setYiiVariables($this->assetData);
-	}
-
-	/*
-	 * Configures an asset described the 'cdnjs' pattern.
-	 */
-	protected function configureCdnjsAsset()
-	{
-		// Assets on CDNJS ALWAYS have versions as '0.0.0'
-		$this->setAssetVersion();
-
-		// $baseUrl OR $sourcePath
-		if(self::useStatic()) {
-			$this->baseUrl = "https://cdnjs.cloudflare.com/ajax/libs/" . $this->packageName()
-				. "/" . $this->assetVersion() . $this->pathTail();
-			if(isset($this->assetData['static']))
-				$this->setYiiVariables($this->assetData['static']);
-		}
-		else {
-			$this->sourcePath = $this->sourcePath . $this->pathTail();
-			if(isset($this->assetData['published']))
-				$this->setYiiVariables($this->assetData['published']);
-		}
-
-		// Set any variables not already set
-		$this->setYiiVariables($this->assetData);
-	}
-
-	/*
-	 * Configures an asset described the 'moment' pattern.
-	 */
-	protected function configureMomentAsset()
-	{
-		$this->setUnpkgPath();
-	}
-
-	/*
-	 * Configures an asset described the 'vendor' pattern.
-	 */
-	protected function configureVendorAsset()
-	{
-		// Set $sourcePath
-		$this->sourcePath = $this->assetData['sourcePath'];
-
-		// Set variables...
-		$this->setYiiVariables($this->assetData);
-	}
-
-	/*
-	 * Sets $baseUrl or $sourcePath for 'unpkg' assets
-	 */
-	private function setUnpkgPath()
-	{
-		// $baseUrl OR $sourcePath
-		if(self::useStatic()) {
-			$this->baseUrl = "https://unpkg.com/" . $this->packageName()
-				. "@" . $this->assetVersion() . $this->pathTail();
-		}
-		else {
-			$this->sourcePath = "@npm/" . $this->packageName() . $this->pathTail();
-		}
-	}
 
 	// ##### ^ ##### UTILITY FUNCTIONS ##### ^ ##### //
 
