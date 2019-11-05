@@ -191,9 +191,44 @@ class P2AssetBase extends \yii\web\AssetBundle
 			self::$_aliasSet = true;
 		}
 
+		$data = $this->packageData;
+
+		$this->configureAssetOptions($data);
+
+		$this->configureAssetOptions($data);
+
 		parent::__construct();
 	}
 
+	protected function configureAsset($data)
+	{
+		if(self::useStatic() && isset($data['static'])) {
+			if(isset($data['baseUrl'])) {
+				$this->baseUrl = $data['baseUrl'];
+				$this->insertAssetVersion($this->baseUrl);
+			}
+		}
+		elseif(isset($data['published'])) {
+			if(isset($data['sourcePath'])) {
+				$this->sourcePath = $data['sourcePath'];
+				$this->insertAssetVersion($this->sourcePath);
+			}
+		}
+
+		if(isset($data['css']))
+			$this->css = $assedataData['css'];
+		if(isset($data['js']))
+			$this->js = $data['js'];
+		if(isset($data['cssOptions']))
+			$this->cssOptions = $assedataData['cssOptions'];
+		if(isset($data['jsOptions']))
+			$this->jsOptions = $assedataData['jsOptions'];
+		if(isset($data['publishOptions']))
+			$this->publishOptions = $assedataData['publishOptions'];
+		if(isset($data['depends']))
+			$this->depends = $assedataData['depends'];
+
+	}
 
 
 
@@ -251,27 +286,10 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 	// ===== utility functions ===== //
 
-	protected function p2mPath()
-	{
-		if(isset($this->_p2mPath)) {
-			return $this->_p2mPath;
-		}
-
-		$this->_p2mPath = '@vendor/p2made/' . $this->_p2mProjectId . '/vendor';
-
-		return $this->_p2mPath;
-	}
-
-	protected function insertP2mPath(&$target)
-	{
-		$target = str_replace('@p2m@', $this->p2mPath(), $target);
-	}
-
 	protected function insertAssetVersion(&$target)
 	{
-		if(isset($this->version)) {
+		if(isset($this->version))
 			$target = str_replace('##-version-##', $this->version, $target);
-		}
 	}
 
 	/**
@@ -281,9 +299,8 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 */
 	protected static function useStatic()
 	{
-		if(isset(self::$_useStatic)) {
+		if(isset(self::$_useStatic))
 			return self::$_useStatic;
-		}
 
 		self::$_useStatic = Settings::assetsUseStatic();
 
@@ -297,9 +314,8 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 */
 	protected static function assetsEnd()
 	{
-		if(isset($_assetsEnd)) {
+		if(isset($_assetsEnd))
 			return $_assetsEnd;
-		}
 
 		$_assetsEnd = Settings::assetsassetsEnd();
 
