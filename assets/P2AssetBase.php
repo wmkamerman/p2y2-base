@@ -34,9 +34,23 @@
 /*
  *
 
+ *
+ */
+
 	protected $packageData = [
-		'static' => [
 			'baseUrl' => 'baseUrl',
+			'sourcePath' => 'sourcePath',
+			'css' => [
+				'css/cssfile.css',
+			],
+			'cssOptions' => [
+			],
+			'js' => [
+				'js/jsfile.js',
+			],
+			'jsOptions' => [
+			],
+		'static' => [
 			'css' => [
 				'css/cssfile.css',
 				[
@@ -53,8 +67,8 @@
 				'js/jsfile.js',
 				[
 					'js/jsfile.js'
-					'integrity' => 'static-hash', // js css has hash[s]
-					'crossorigin' => 'anonymous', // js css has hash[s]
+					'integrity' => 'static-hash', // iff js has hash[s]
+					'crossorigin' => 'anonymous', // iff js has hash[s]
 				],
 			],
 			'jsOptions' => [
@@ -65,7 +79,6 @@
 			],
 		],
 		'published' => [
-			'sourcePath' => 'sourcePath',
 			'css' => [
 				'css/cssfile.css',
 			],
@@ -79,13 +92,41 @@
 			'publishOptions' => [
 			],
 		],
+			'publishOptions' => [
+			],
 		'depends' => [
 			'some\useful\ThingAsset',
 		],
 	];
 
- *
- */
+
+	protected $packageData = [
+		'baseUrl' => 'https://cdn.jsdelivr.net/npm/bootstrap@##-version-##/dist',
+		'sourcePath' => '@npm/bootstrap/dist',
+		'css' => [
+			'css/bootstrap.min.css',
+		],
+		'js' => [
+			'js/bootstrap.min.js',
+		],
+		'static' => [
+			'cssOptions' => [
+				'integrity' => 'sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T',
+				'crossorigin' => 'anonymous',
+			],
+			'jsOptions' => [
+				'integrity' => 'sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM',
+				'crossorigin' => 'anonymous',
+			],
+		],
+		'depends' => [
+			'p2m\assets\base\P2YiiAsset',
+		],
+	];
+
+
+
+
 
 namespace p2m\base\assets;
 
@@ -173,7 +214,20 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 * public $depends = [];
 	 */
 
+	/*
 	protected function __construct($bypass = false, $config = [])
+	{
+
+		if($bypass) return;
+
+		$data = $this->packageData;
+
+
+		parent::__construct();
+	}
+	*/
+
+	protected function configureAsset($assetData)
 	{
 		/*
 		 * For easier access to p2m stuff we give it an alias
@@ -181,17 +235,12 @@ class P2AssetBase extends \yii\web\AssetBundle
 		 * the 2nd asset & after need different names.
 		 */
 		//self::setP2mAlias();
-
-		if($bypass) return;
-
 		if(!self::$_aliasSet) {
-			Yii::setAlias('@p2m',      '@vendor/p2made');
-			Yii::setAlias('@jsdelivr', 'https://cdn.jsdelivr.net/npm');
-			Yii::setAlias('@cdnjs',    'https://cdnjs.cloudflare.com/ajax/libs');
+			\Yii::setAlias('@p2m',      '@vendor/p2made');
+			\Yii::setAlias('@jsdelivr', 'https://cdn.jsdelivr.net/npm');
+			\Yii::setAlias('@cdnjs',    'https://cdnjs.cloudflare.com/ajax/libs');
 			self::$_aliasSet = true;
 		}
-
-		$data = $this->packageData;
 
 		$this->configureAssetOptions($data);
 
@@ -214,20 +263,18 @@ class P2AssetBase extends \yii\web\AssetBundle
 			$this->js = $data['js'];
 
 		$this->configureAssetOptions($data);
-
-		parent::__construct();
 	}
 
-	protected function configureAssetOptions($assetData)
+	protected function configureAssetOptions($data)
 	{
 		if(isset($data['cssOptions']))
-			$this->cssOptions = $assedataData['cssOptions'];
+			$this->cssOptions = $data['cssOptions'];
 		if(isset($data['jsOptions']))
-			$this->jsOptions = $assedataData['jsOptions'];
+			$this->jsOptions = $data['jsOptions'];
 		if(isset($data['publishOptions']))
-			$this->publishOptions = $assedataData['publishOptions'];
+			$this->publishOptions = $data['publishOptions'];
 		if(isset($data['depends']))
-			$this->depends = $assedataData['depends'];
+			$this->depends = $data['depends'];
 	}
 
 	// ===== utility functions ===== //
