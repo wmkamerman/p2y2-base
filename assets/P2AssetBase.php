@@ -29,6 +29,64 @@
  *     'p2m\assets\base\P2AssetBase',
  */
 
+// ##### ^ ##### ^ P2 asset data structure ^ ##### ^ #####
+
+/*
+ *
+
+	protected $packageData = [
+		'static' => [
+			'baseUrl' => 'baseUrl',
+			'css' => [
+				'css/cssfile.css',
+				[
+					'css/cssfile.css'
+					'integrity' => 'static-hash', // iff css has hash[s]
+					'crossorigin' => 'anonymous', // iff css has hash[s]
+				],
+			],
+			'cssOptions' => [
+				'integrity' => 'static-hash', // iff css has hash[s]
+				'crossorigin' => 'anonymous', // iff css has hash[s]
+			],
+			'js' => [
+				'js/jsfile.js',
+				[
+					'js/jsfile.js'
+					'integrity' => 'static-hash', // js css has hash[s]
+					'crossorigin' => 'anonymous', // js css has hash[s]
+				],
+			],
+			'jsOptions' => [
+				'integrity' => 'static-hash', // iff js has hash[s]
+				'crossorigin' => 'anonymous', // iff js has hash[s]
+			],
+			'publishOptions' => [
+			],
+		],
+		'published' => [
+			'sourcePath' => 'sourcePath',
+			'css' => [
+				'css/cssfile.css',
+			],
+			'cssOptions' => [
+			],
+			'js' => [
+				'js/jsfile.js',
+			],
+			'jsOptions' => [
+			],
+			'publishOptions' => [
+			],
+		],
+		'depends' => [
+			'some\useful\ThingAsset',
+		],
+	];
+
+ *
+ */
+
 namespace p2m\base\assets;
 
 use p2m\base\helpers\P2AssetsSettings;
@@ -44,21 +102,22 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 	/*
 	 * @var string
-	 * protected $assetName;
+	 * protected $packageName;
+	 * The simple name of the package that the asset is built on
 	 */
-	protected $assetName;
+	protected $packageName;
 
 	/*
 	 * @var string
-	 * protected $version;
+	 * protected $packageVersion;
 	 */
-	protected $version; // = '0.0.0'
+	protected $packageVersion; // = '0.0.0'
 
 	/*
 	 * @var array
-	 * protected $resourceData;
+	 * protected $packageData;
 	 */
-	protected $resourceData = [];
+	protected $packageData = [];
 
 // ##### ^ ##### ^ Private Variables ^ ##### ^ #####
 
@@ -85,28 +144,6 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 * private $_version;
 	 */
 	private $_version; // = '0.0.0'
-
-	/*
-	 * @var string
-	 * protected $_packageName;
-	 * The simple name of the package that the asset is built on
-	 * Usually the same as $assetName
-	 */
-	private $_package;
-
-
-	/*
-	 * ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ #####
-	 * ##### ^ #####   WANT TO GET RID OF...   ##### ^ #####
-	 * ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ #####
-	 */
-
-	// ##### ^ ##### WANT TO GET RID OF THIS ##### ^ #####
-	/*
-	 * @var string
-	 * private $_p2mPath;
-	 */
-	private $_p2mPath;
 
 // ##### ^ ##### ^ Yii Asset Variables ^ ##### ^ #####
 
@@ -136,61 +173,6 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 * public $depends = [];
 	 */
 
-	/*
-	 * P2 asset data structure
-	 *
-
-	protected $resourceData = [
-		'static' => [
-			'baseUrl' => 'baseUrl',
-			'css' => [
-				'css/cssfile.css',
-			],
-			'cssOptions' => [ // iff there are static specific cssOptions
-				'integrity' => 'static-hash', // iff css has hash[s]
-				'crossorigin' => 'anonymous', // iff css has hash[s]
-			],
-			'js' => [
-				'js/jsfile.js',
-			],
-			'jsOptions' => [ // iff there are static specific jsOptions
-				'integrity' => 'static-hash', // iff js has hash[s]
-				'crossorigin' => 'anonymous', // iff js has hash[s]
-			],
-			'depends' => [ // iff there are static specific depends
-			],
-			'publishOptions' => [ // iff there are static specific publishOptions
-			],
-		],
-		'published' => [
-			'sourcePath' => 'sourcePath',
-			'css' => [
-				'css/cssfile.css',
-			],
-			'cssOptions' => [ // iff there are static specific cssOptions
-				'integrity' => 'static-hash', // iff css has hash[s]
-				'crossorigin' => 'anonymous', // iff css has hash[s]
-			],
-			'js' => [
-				'js/jsfile.js',
-			],
-			'jsOptions' => [ // iff there are static specific jsOptions
-				'integrity' => 'static-hash', // iff js has hash[s]
-				'crossorigin' => 'anonymous', // iff js has hash[s]
-			],
-			'depends' => [ // iff there are static specific depends
-			],
-			'publishOptions' => [ // iff there are static specific publishOptions
-			],
-		],
-		'depends' => [
-			'some\useful\ThingAsset',
-		],
-	];
-
-	 *
-	 */
-
 	protected function __construct($bypass = false, $config = [])
 	{
 		/*
@@ -203,10 +185,11 @@ class P2AssetBase extends \yii\web\AssetBundle
 		if($bypass) return;
 
 		if(!self::$_aliasSet) {
-			Yii::setAlias('@p2m', '@vendor/p2made');
+			Yii::setAlias('@p2m',      '@vendor/p2made');
+			Yii::setAlias('@jsdelivr', 'https://cdn.jsdelivr.net/npm');
+			Yii::setAlias('@cdnjs',    'https://cdnjs.cloudflare.com/ajax/libs');
 			self::$_aliasSet = true;
 		}
-
 
 		parent::__construct();
 	}
