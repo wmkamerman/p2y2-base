@@ -2,8 +2,8 @@
 /**
  * P2AssetBase.php
  *
- * @copyright Copyright &copy; Pedro Plowman, 2017
  * @author Pedro Plowman
+ * @copyright Copyright &copy; Pedro Plowman, 2019
  * @link https://github.com/p2made
  * @license MIT
  *
@@ -21,10 +21,6 @@
  * ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ ##### ^ #####
  */
 
-namespace p2m\base\assets;
-
-use p2m\base\helpers\AssetsSettings;
-
 /**
  * Load this asset with...
  * p2m\assets\base\P2AssetBase::register($this);
@@ -32,8 +28,15 @@ use p2m\base\helpers\AssetsSettings;
  * or specify as a dependency with...
  *     'p2m\assets\base\P2AssetBase',
  */
+
+namespace p2m\base\assets;
+
+use p2m\base\helpers\P2AssetsSettings as Settings;
+
 class P2AssetBase extends \yii\web\AssetBundle
 {
+	// ##### ^ ##### ^ P2M Asset Properties ^ ##### ^ #####
+
 	/*
 	 * @var string
 	 * private $_p2mProjectId;
@@ -42,27 +45,94 @@ class P2AssetBase extends \yii\web\AssetBundle
 
 	/*
 	 * @var string
-	 * protected $assetName;
+	 * protected $packageName;
+	 * The simple name of the package that the asset is built on
 	 */
-	protected $assetName;
+	protected $packageName;
 
 	/*
 	 * @var string
-	 * protected $version;
+	 * protected $packageVersion;
 	 */
-	protected $version; // = '0.0.0'
+	protected $packageVersion; // = '0.0.0'
 
 	/*
 	 * @var array
-	 * protected $resourceData;
+	 * protected $packageData;
 	 */
-	protected $resourceData = [];
+	protected $packageData = [];
+
+	// ##### ^ ##### ^ P2 asset data structure ^ ##### ^ #####
 
 	/*
-	 * @var string
-	 * private $_p2mPath;
+	 *
+
+	protected $packageData = [
+		'baseUrl' => 'baseUrl',
+		'sourcePath' => 'sourcePath',
+		'static' => [
+			'css' => [
+				'css/cssfile.css',
+				[
+					'css/cssfile.css'
+					'integrity' => 'static-hash', // iff css has hash[s]
+					'crossorigin' => 'anonymous', // iff css has hash[s]
+				],
+			],
+			'cssOptions' => [
+				'integrity' => 'static-hash', // iff css has hash[s]
+				'crossorigin' => 'anonymous', // iff css has hash[s]
+			],
+			'js' => [
+				'js/jsfile.js',
+				[
+					'js/jsfile.js'
+					'integrity' => 'static-hash', // iff js has hash[s]
+					'crossorigin' => 'anonymous', // iff js has hash[s]
+				],
+			],
+			'jsOptions' => [
+				'integrity' => 'static-hash', // iff js has hash[s]
+				'crossorigin' => 'anonymous', // iff js has hash[s]
+			],
+			'publishOptions' => [
+			],
+		],
+		'published' => [
+			'css' => [
+				'css/cssfile.css',
+			],
+			'cssOptions' => [
+			],
+			'js' => [
+				'js/jsfile.js',
+			],
+			'jsOptions' => [
+			],
+			'publishOptions' => [
+			],
+		],
+		'css' => [
+			'css/cssfile.css',
+		],
+		'cssOptions' => [
+		],
+		'js' => [
+			'js/jsfile.js',
+		],
+		'jsOptions' => [
+		],
+		'publishOptions' => [
+		],
+		'depends' => [
+			'some\useful\ThingAsset',
+		],
+	];
+
+	 *
 	 */
-	private $_p2mPath;
+
+	// ##### ^ ##### ^ Private Properties ^ ##### ^ #####
 
 	/*
 	 * @var boolean
@@ -76,136 +146,95 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 */
 	private static $_assetsEnd;
 
+	/*
+	 * @var bool | false
+	 * private $_assetsEnd = false;
+	 */
+	private static $_aliasSet = false;
+
+	/*
+	 * @var string
+	 * private $_version;
+	 */
+	private $_version; // = '0.0.0'
+
+	// ##### ^ ##### ^ Yii Asset VariaPropertiesles ^ ##### ^ #####
+
 	/**
 	 * @var string
-	 * public $sourcePath;
+	 * public $baseUrl;
 	 *
 	 * @var string
-	 * public $baseUrl;
+	 * public $sourcePath;
 	 *
 	 * @var array
 	 * public $css = [];
 	 *
 	 * @var array
-	 * public $cssOptions = [];
+	 * public $js = [];
 	 *
 	 * @var array
-	 * public $js = [];
+	 * public $cssOptions = [];
 	 *
 	 * @var array
 	 * public $jsOptions = [];
 	 *
 	 * @var array
-	 * public $depends = [];
+	 * public $publishOptions = [];
 	 *
 	 * @var array
-	 * public $publishOptions = [];
+	 * public $depends = [];
 	 */
 
-/*
-		'jqueryAsset' => array(
-			'name' => 'jquery',
-			'version' => '3.3.1',
-			'published' => [
-				'sourcePath' => '@p2m@/jquery',
-				'js' => [
-					'jquery-##-version-##.min.js',
-				],
-			],
-			'static' => [
-				'baseUrl' => 'https://code.jquery.com',
-				'js' => [
-					'jquery-##-version-##.min.js',
-				],
-				'jsIntegrity' => 'sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT',
-				'crossorigin' => 'anonymous',
-			],
-		),
-
- */
-
-	protected function configureAssetFromData($assetData)
+	protected function configureAsset($data)
 	{
-	}
+		$insertVersion = function($source) {
+			if(isset($this->packageVersion))
+				return str_replace('##-version-##', $this->packageVersion, $source);
+			return $source;
+		};
 
-	protected function configureAsset($assetData)
-	{
-		if(isset($assetData['cssOptions'])) {
-			$this->cssOptions = $assetData['cssOptions'];
-		}
-		if(isset($assetData['jsOptions'])) {
-			$this->jsOptions = $assetData['jsOptions'];
-		}
-		if(isset($assetData['depends'])) {
-			$this->depends = $assetData['depends'];
-		}
-		if(isset($assetData['publishOptions'])) {
-			$this->publishOptions = $assetData['publishOptions'];
-		}
-
-		if(self::useStatic() && isset($assetData['static'])) {
-			$this->configureStaticAsset($assetData['static']);
-		} elseif(isset($assetData['published'])) {
-			$this->configurePublishedAsset($assetData['published']);
-		} else {
-			return;
-		}
-	}
-
-	protected function configureStaticAsset($assetData)
-	{
-		if(isset($assetData['baseUrl'])) {
-			$this->baseUrl = $assetData['baseUrl'];
-			$this->insertAssetVersion($this->baseUrl);
-		}
-		if(isset($assetData['css'])) {
-			$this->css = $assetData['css'];
-		}
-		if(isset($assetData['js'])) {
-			$this->js = $assetData['js'];
-		}
-	}
-
-	protected function configurePublishedAsset($assetData)
-	{
-		if(isset($assetData['sourcePath'])) {
-			$this->sourcePath = $assetData['sourcePath'];
-			$this->insertAssetVersion($this->sourcePath);
-			$this->insertP2mPath($this->sourcePath);
+		/*
+		 * For easier access to p2m stuff we give it an alias
+		 * but only if it hasn't already been set.
+		 * the 2nd asset & after need different names.
+		 */
+		//self::setP2mAlias();
+		if(!self::$_aliasSet) {
+			\Yii::setAlias('@p2m',      '@vendor/p2made');
+			\Yii::setAlias('@jsdelivr', 'https://cdn.jsdelivr.net/npm');
+			\Yii::setAlias('@cdnjs',    'https://cdnjs.cloudflare.com/ajax/libs');
+			self::$_aliasSet = true;
 		}
 
-		if(isset($assetData['css'])) {
-			$this->css = $assetData['css'];
+		if(self::useStatic()) {
+			$branch = 'static';
+			if(isset($data['baseUrl']))
+				$this->baseUrl = $insertVersion($data['baseUrl']);
 		}
-		if(isset($assetData['js'])) {
-			$this->js = $assetData['js'];
+		else {
+			$branch = 'published';
+			if(isset($data['sourcePath']))
+				$this->sourcePath = $insertVersion($data['sourcePath']);
+		}
+
+		if(isset($data[$branch])) {
+			$branchData = $data[$branch];
+			$dataTemp = $data;
+			$data = array_merge($dataTemp, $branchData);
+		}
+
+		$yiiAttributes = [
+			'css', 'cssOptions', 'js', 'jsOptions', 'publishOptions', 'depends'
+		];
+
+		foreach($yiiAttributes as $attribute) {
+			if(isset($data[$attribute]))
+				$this->{$attribute} = $data[$attribute];
 		}
 	}
 
 	// ===== utility functions ===== //
-
-	protected function p2mPath()
-	{
-		if(isset($this->_p2mPath)) {
-			return $this->_p2mPath;
-		}
-
-		$this->_p2mPath = '@vendor/p2made/' . $this->_p2mProjectId . '/vendor';
-
-		return $this->_p2mPath;
-	}
-
-	protected function insertP2mPath(&$target)
-	{
-		$target = str_replace('@p2m@', $this->p2mPath(), $target);
-	}
-
-	protected function insertAssetVersion(&$target)
-	{
-		if(isset($this->version)) {
-			$target = str_replace('##-version-##', $this->version, $target);
-		}
-	}
 
 	/**
 	 * Get useStatic setting - use static resources
@@ -214,11 +243,10 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 */
 	protected static function useStatic()
 	{
-		if(isset(self::$_useStatic)) {
+		if(isset(self::$_useStatic))
 			return self::$_useStatic;
-		}
 
-		self::$_useStatic = AssetsSettings::assetsUseStatic();
+		self::$_useStatic = Settings::assetsUseStatic();
 
 		return self::$_useStatic;
 	}
@@ -230,12 +258,24 @@ class P2AssetBase extends \yii\web\AssetBundle
 	 */
 	protected static function assetsEnd()
 	{
-		if(isset($_assetsEnd)) {
+		if(isset($_assetsEnd))
 			return $_assetsEnd;
-		}
 
-		$_assetsEnd = AssetsSettings::assetsassetsEnd();
+		$_assetsEnd = Settings::assetsassetsEnd();
 
 		return $_assetsEnd;
 	}
 }
+
+	/*
+	protected function __construct($bypass = false, $config = [])
+	{
+
+		if($bypass) return;
+
+		$data = $this->packageData;
+
+
+		parent::__construct();
+	}
+	*/

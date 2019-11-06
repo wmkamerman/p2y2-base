@@ -1,6 +1,6 @@
 <?php
 /**
- * AssetsSettings.php
+ * P2AssetsSettings.php
  *
  * @copyright Copyright &copy; Pedro Plowman, 2017
  * @author Pedro Plowman
@@ -8,7 +8,7 @@
  * @license MIT
  *
  * @package p2made/yii2-p2y2-base
- * @class \p2m\base\helpers\AssetsSettings
+ * @class \p2m\base\helpers\P2AssetsSettings
  */
 
 namespace p2m\base\helpers;
@@ -19,7 +19,7 @@ use Yii;
  * Settings for p2m assets
  * Located here to be used in multiple packages
  */
-class AssetsSettings extends P2Settings
+class P2AssetsSettings extends P2Settings
 {
 	/**
 	 *
@@ -61,9 +61,8 @@ class AssetsSettings extends P2Settings
 	 */
 	public static function assetsSettings()
 	{
-		if(isset(self::$_assetsSettings)) {
+		if(isset(self::$_assetsSettings))
 			return self::$_assetsSettings;
-		}
 
 		return self::getSettingsBlock(self::BLOCK_NAME);
 	}
@@ -75,9 +74,8 @@ class AssetsSettings extends P2Settings
 	 */
 	public static function assetsUseStatic()
 	{
-		if(isset(self::$_useStatic)) {
+		if(isset(self::$_useStatic))
 			return self::$_useStatic;
-		}
 
 		return self::getSettingsItem(
 			self::$_useStatic,
@@ -94,9 +92,8 @@ class AssetsSettings extends P2Settings
 	 */
 	public static function assetsStaticEnd()
 	{
-		if(isset(self::$_staticEnd)) {
+		if(isset(self::$_staticEnd))
 			return self::$_staticEnd;
-		}
 
 		return self::getSettingsItem(
 			self::$_staticEnd,

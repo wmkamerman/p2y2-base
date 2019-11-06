@@ -18,12 +18,13 @@
 		"source": "https://github.com/p2made/yii2-p2y2-base"
 	},
 
-	"version": "1.1.4",
+	"version": "4.0.0-rc1",
 	"minimum-stability": "dev",
 	"prefer-stable" : true,
 
 	"require": {
-		"yiisoft/yii2": "^2.0"
+		"yiisoft/yii2": "~2.0.14",
+		"yiisoft/yii2-bootstrap4": "~2.0.6"
 	},
 	"require-dev": {
 	},

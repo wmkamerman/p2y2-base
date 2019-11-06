@@ -2,7 +2,7 @@
 /**
  * _ExampleAsset.php
  *
- * @copyright Copyright &copy; Pedro Plowman, 2017
+ * @copyright Copyright &copy; Pedro Plowman, 2019
  * @author Pedro Plowman
  * @link https://github.com/p2made
  * @license MIT
@@ -11,8 +11,6 @@
  * @class \p2m\base\assets\_ExampleAsset
  */
 
-namespace p2m\base\assets; /* edit this if using elsewhere */
-
 /**
  * Load this asset with...
  * p2m\assets\_ExampleAsset::register($this);
@@ -20,36 +18,16 @@ namespace p2m\base\assets; /* edit this if using elsewhere */
  * or specify as a dependency with...
  *     'p2m\assets\_ExampleAsset',
  */
-class _ExampleAsset extends P2AssetBase
+
+namespace p2m\base\assets; /* edit this if using elsewhere */
+
+class _ExampleAsset extends \p2m\base\assets\P2AssetBase
 {
+	protected $_p2mProjectId = 'yii2-p2y2-project';
+
 	protected $version = '0.0.0';
 
-	private $resourceData = array(
-
-		/**
-		 * 'published' section
-		 * use this for published version of assets
-		 * leave out if there's no published version
-		 */
-		'published' => [
-			'sourcePath' => '@path/to/assets/folder',
-			'css' => [
-				'css/css_file.css',
-			],
-			'js' => [
-				'js/js_file.js',
-			],
-			/**
-			 * OPTIONAL :
-			 * Use 'endName' for custom assets belonging to one application end,
-			 * AND when you have a static application end to publish asset to,
-			 * AND when you want to publish asset to an end specific folder
-			 * leave any of the above is NOT true
-			 */
-			//
-			'endName' = 'endName',
-		],
-
+	private $assetData = [
 		/**
 		 * 'static' section
 		 * use this for static version of assets
@@ -64,21 +42,40 @@ class _ExampleAsset extends P2AssetBase
 				'js/js_file.js',
 			],
 		],
-
+		/**
+		 * 'published' section
+		 * use this for published version of assets
+		 * leave out if there's no published version
+		 */
+		'published' => [
+			'sourcePath' => '@path/to/assets/folder',
+			'css' => [
+				'css/css_file.css',
+			],
+			'js' => [
+				'js/js_file.js',
+			],
+		],
+		'css' => [
+		],
 		'cssOptions' => [
-			// cssOptions like any other assets
-			// or leave out if no cssOptions
+		],
+		'js' => [
 		],
 		'jsOptions' => [
-			// jsOptions like any other assets
-			// or leave out if no jsOptions
 		],
 		'depends' => [
-			// depends like any other assets
-			// or leave out if no depends
 		],
 
-	);
+		/**
+		 * OPTIONAL :
+		 * Use 'endName' for custom assets belonging to one application end,
+		 * AND when you have a static application end to publish asset to,
+		 * AND when you want to publish asset to an end specific folder
+		 * leave any of the above is NOT true
+		 */
+		'endName' = 'endName',
+	];
 
 	public function init()
 	{
