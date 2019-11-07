@@ -19,7 +19,7 @@
 	},
 
 	"version": "4.0.0",
-	"minimum-stability": "dev",
+	"minimum-stability": "stable",
 	"prefer-stable" : true,
 
 	"require": {
