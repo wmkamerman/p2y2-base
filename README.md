@@ -1,6 +1,6 @@
 # P2Y2 Base v4.0.0
 
-A base bundle for other P2Y2 bundles.
+A base bundle for other [P2Y2](https://github.com/p2made) bundles.
 
 Installation
 ------------
