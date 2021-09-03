@@ -1,27 +1,34 @@
-# P2Y2 Base v4.0.0
+# P2Y2 Base v5.0.0
 
 A base bundle for other [P2Y2](https://github.com/p2made) bundles.
 
-Installation
-------------
+--
+# ¡¡ Notice !!
+
+After an extented period of life getting in the way I'm back to [Yii2](https://www.yiiframework.com/) development. I'll be rebasing every project as I resume work on it. Projects that use [Bootstrap](https://getbootstrap.com/) will resume as version `5.0.0-dev`.
+
+--
+--
+
+# Installation
 
 The preferred way to install P2Y2 Base is through [composer](http://getcomposer.org/download/).
 Depending on your composer installation, run *one* of the following commands:
 
 ```
-    composer require p2made/yii2-p2y2-base "~4.0"
+	composer require p2made/yii2-p2y2-base "~4.0"
 ```
 
 or
 
 ```
-    php composer.phar require p2made/yii2-p2y2-base "~4.0"
+	php composer.phar require p2made/yii2-p2y2-base "~4.0"
 ```
 
 Alternatively add:
 
 ```
-    "p2made/yii2-p2y2-base": "~4.0"
+	"p2made/yii2-p2y2-base": "~4.0"
 ```
 
 to the requires section of your `composer.json` file & P2Y2 Base will be installed next time you run `composer update`.
