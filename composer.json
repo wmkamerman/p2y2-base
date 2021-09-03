@@ -18,7 +18,6 @@
 		"source": "https://github.com/p2made/yii2-p2y2-base"
 	},
 
-	"version": "5.0.0",
 	"minimum-stability": "stable",
 	"prefer-stable" : true,
 
