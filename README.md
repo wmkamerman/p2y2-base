@@ -5,7 +5,7 @@ A base bundle for other [P2Y2](https://github.com/p2made) bundles.
 --
 # ¡¡ Notice !!
 
-After an extented period of life getting in the way I'm back to [Yii2](https://www.yiiframework.com/) development. I'll be rebasing every project as I resume work on it. Projects that use [Bootstrap](https://getbootstrap.com/) will resume as version `5.0.0-dev`.
+After an extented period of life getting in the way I'm back to [Yii2](https://www.yiiframework.com/) development. I'll be rebasing every project as I resume work on it. Projects that use [Bootstrap](https://getbootstrap.com/) will resume as version `5.0.0` for Bootstrap 5.x.
 
 --
 --
