@@ -22,19 +22,19 @@ The preferred way to install P2Y2 Base is through [composer](http://getcomposer.
 Depending on your composer installation, run *one* of the following commands:
 
 ```
-	composer require p2made/p2y2-base "~4.0"
+	composer require p2made/p2y2-base "~5.0"
 ```
 
 or
 
 ```
-	php composer.phar require p2made/p2y2-base "~4.0"
+	php composer.phar require p2made/p2y2-base "~5.0"
 ```
 
 Alternatively add:
 
 ```
-	"p2made/p2y2-base": "~4.0"
+	"p2made/p2y2-base": "~5.0"
 ```
 
 to the requires section of your `composer.json` file & P2Y2 Base will be installed next time you run `composer update`.
