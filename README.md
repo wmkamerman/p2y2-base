@@ -1,6 +1,12 @@
-# P2Y2 Base v5.0.0
+# P2Y2 Base v5.0.0-dev
 
 A base bundle for other [P2Y2](https://github.com/p2made) bundles.
+
+[![License](https://poser.pugx.org/p2made/p2y2-base/license)](https://packagist.org/packages/p2made/p2y2-base)
+[![Total Downloads](https://poser.pugx.org/p2made/p2y2-base/downloads)](https://packagist.org/packages/p2made/p2y2-base)
+[![Monthly Downloads](https://poser.pugx.org/p2made/p2y2-base/d/monthly)](https://packagist.org/packages/p2made/p2y2-base)
+[![Latest Stable Version](https://poser.pugx.org/p2made/p2y2-base/v/stable)](https://packagist.org/packages/p2made/p2y2-base)
+[![Latest Unstable Version](https://poser.pugx.org/p2made/p2y2-base/v/unstable)](https://packagist.org/packages/p2made/p2y2-base)
 
 ---
 
