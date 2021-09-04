@@ -1,4 +1,4 @@
-# P2Y2 Base
+# P2Y2 Base v5.0.0-dev
 
 A base bundle for other [P2Y2](https://github.com/p2made) bundles.
 
