@@ -14,8 +14,8 @@
 		}
 	],
 	"support": {
-		"issues": "https://github.com/p2made/yii2-p2y2-base/issues?state=open",
-		"source": "https://github.com/p2made/yii2-p2y2-base"
+		"issues": "https://github.com/p2made/p2y2-base/issues?state=open",
+		"source": "https://github.com/p2made/p2y2-base"
 	},
 
 	"minimum-stability": "stable",
