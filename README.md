@@ -1,4 +1,4 @@
-# P2Y2 Base
+# P2Y2 Base 5.0.0
 
 A base bundle for other [P2Y2](https://github.com/p2made) bundles.
 
@@ -34,7 +34,7 @@ or
 Alternatively add:
 
 ```
-	"p2made/p2y2-base": "^5.0"
+		"p2made/p2y2-base": "^5.0"
 ```
 
 to the requires section of your `composer.json` file & P2Y2 Base will be installed next time you run `composer update`.
